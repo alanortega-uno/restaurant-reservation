@@ -1,0 +1,17 @@
+{
+  "name": "restaurant-reservations",
+  "workspaces": [
+    "packages/api",
+    "packages/app",
+    "packages/shared"
+  ],
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
