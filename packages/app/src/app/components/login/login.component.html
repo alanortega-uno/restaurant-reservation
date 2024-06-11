@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <form
+    [formGroup]="loginForm"
+    class="d-flex flex-column justify-content-center align-items-center border border-light rounded p-3 bg-light"
+    (ngSubmit)="sendLoginRequest()"
+  >
+    <legend class="text-center">Reservations</legend>
+    <div class="mb-3">
+      <input
+        id="email"
+        class="form-control"
+        type="text"
+        formControlName="email"
+        placeholder="Email"
+      />
+
+      <div
+        *ngIf="
+          loginForm.get('email')?.invalid &&
+          (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+        "
+        class="text-danger"
+      >
+        <div *ngIf="loginForm.get('email')?.errors?.['required']">
+          Email is required
+        </div>
+        <div *ngIf="loginForm.get('email')?.errors?.['email']">
+          Invalid email
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <input
+        id="password"
+        class="form-control"
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+
+      <div
+        *ngIf="
+          loginForm.get('password')?.invalid &&
+          (loginForm.get('password')?.dirty ||
+            loginForm.get('password')?.touched)
+        "
+        class="text-danger"
+      >
+        <div *ngIf="loginForm.get('password')?.errors?.['required']">
+          Password is required
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 d-flex flex-column">
+      <button class="btn btn-primary" [disabled]="loginForm.invalid">
+        Login
+      </button>
+
+      <button type="button" class="btn btn-link">Create new account</button>
+
+      <button type="button" class="btn btn-danger mt-4">
+        Use Google <i class="bi bi-google"></i>
+      </button>
+    </div>
+    <div *ngIf="apiError" class="alert alert-danger">
+      {{ apiError.error.message }}
+    </div>
+  </form>
+</div>
