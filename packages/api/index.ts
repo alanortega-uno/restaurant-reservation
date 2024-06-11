@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 
 import { routes } from "./routes";
 
@@ -10,6 +11,17 @@ import { AccountEntity } from "./src/entities/account";
 import { RefreshTokenEntity } from "./src/entities/refreshToken";
 
 const app: Express = express();
+
+const allowedOrigins = [
+  "http://localhost:4200",
+  "http://BOL-MC-240604D.local:3000",
+];
+const corsOptions: cors.CorsOptions = {
+  origin: allowedOrigins,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
 
 const main = async () => {
   try {
@@ -27,8 +39,6 @@ const main = async () => {
     await AppDataSource.initialize();
 
     console.info("[database]: Data Source has been initialized");
-
-    app.use(express.json());
 
     const port = process.env.PORT || 4000;
 
