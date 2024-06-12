@@ -35,6 +35,25 @@ export const createAccount = async (request: Request, response: Response) => {
       return;
     }
 
+    const accountExists = await AccountEntity.findOne({
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        is_admin: true,
+      },
+      where: {
+        email,
+      },
+    });
+
+    if (accountExists) {
+      response.status(StatusCodes.CONFLICT).json({
+        message: "Account already exists",
+      });
+      return;
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAccountEntity = AccountEntity.create({
@@ -59,7 +78,7 @@ export const createAccount = async (request: Request, response: Response) => {
     });
   } catch (error) {
     response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: JSON.stringify(error),
+      message: "Internal server error",
     });
   }
 };
@@ -124,7 +143,93 @@ export const login = async (request: Request, response: Response) => {
     }
   } catch (error) {
     console.error(error);
-    response.status(500).send();
+    response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+export const googleAuth = async (request: Request, response: Response) => {
+  const { credentials } = request.body;
+
+  if (!credentials) {
+    response.status(StatusCodes.UNAUTHORIZED).json({
+      message: "Send your credentials",
+    });
+  }
+
+  const googleAccount = JSON.parse(atob(credentials.split(".")[1]));
+
+  const email: string = googleAccount.email;
+  const password: string = googleAccount.sub;
+
+  const account = await AccountEntity.findOne({
+    select: {
+      id: true,
+      email: true,
+      password: true,
+      is_admin: true,
+    },
+    where: {
+      email,
+    },
+  });
+
+  if (!account) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newAccountEntity = AccountEntity.create({
+      email,
+      password: hashedPassword,
+    });
+
+    await newAccountEntity.save();
+
+    const newAccount: Account = {
+      id: newAccountEntity.id,
+      email: newAccountEntity.email,
+      isAdmin: newAccountEntity.is_admin,
+    };
+
+    const accessToken = generateAccessToken(newAccount);
+    const refreshToken = generateRefreshToken(newAccount);
+
+    response.status(StatusCodes.CREATED).json({
+      accessToken,
+      refreshToken,
+    });
+
+    return;
+  }
+  // console.log(JSON.parse(atob(credentials.split(".")[1])));
+  // response.redirect("http://localhost:4200/reservation");
+  try {
+    const payload: Account = {
+      id: account.id,
+      email: account.email,
+      isAdmin: account.is_admin,
+    };
+
+    if (!process.env.ACCESS_TOKEN_SECRET) {
+      throw new Error("There is no ACCESS_TOKEN_SECRET");
+    }
+
+    if (!process.env.REFRESH_TOKEN_SECRET) {
+      throw new Error("There is no REFRESH_TOKEN_SECRET");
+    }
+
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    response.status(StatusCodes.OK).json({
+      accessToken,
+      refreshToken,
+    });
+  } catch (error) {
+    console.error(error);
+    response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Internal server error",
+    });
   }
 };
 
