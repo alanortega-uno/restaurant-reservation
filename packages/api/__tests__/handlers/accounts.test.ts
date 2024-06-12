@@ -32,10 +32,6 @@ describe("Account Endpoint", () => {
     await AppDataSource.initialize();
   });
 
-  afterAll(async () => {
-    await AppDataSource.destroy();
-  });
-
   describe("Login", () => {
     it("should not be able to log in with an email that does not exist", async () => {
       const res = await request(app).post("/auth/login").send({
