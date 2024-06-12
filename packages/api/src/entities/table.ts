@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { ReservationEntity } from "./reservation";
 
-@Entity()
+@Entity("table")
 export class TableEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -11,6 +11,11 @@ export class TableEntity {
 
   @Column()
   capacity: number;
+
+  @Column({
+    default: 0,
+  })
+  status: number;
 
   @OneToMany(() => ReservationEntity, (reservation) => reservation.table)
   reservations: ReservationEntity[];

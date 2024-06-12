@@ -1,8 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { AccountEntity } from "./account";
 import { TableEntity } from "./table";
 
-@Entity()
+@Entity("reservation")
 export class ReservationEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -16,12 +23,15 @@ export class ReservationEntity {
   @Column()
   numberOfPeople: string;
 
-  @Column()
-  reservationTime: Date;
-
   @ManyToOne(() => AccountEntity, (account) => account.reservations)
   user: AccountEntity;
 
   @ManyToOne(() => TableEntity, (table) => table.reservations)
   table: TableEntity;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
