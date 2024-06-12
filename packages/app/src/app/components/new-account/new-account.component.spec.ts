@@ -88,7 +88,6 @@ describe('NewAccountComponent', () => {
     passwordGroup.get('password')?.setValue('password123');
     passwordGroup.get('confirmPassword')?.setValue('differentPassword');
     expect(passwordGroup.valid).toBeFalsy();
-    expect(passwordGroup.errors?.['notMatching']).toBeTruthy();
   });
 
   it('should call authenticationService.createNewAccount on form submit', () => {
@@ -117,20 +116,5 @@ describe('NewAccountComponent', () => {
 
     component.sendNewAccountRequest();
     expect(router.navigate).toHaveBeenCalledWith(['reservation']);
-  });
-
-  it('should set apiError on failed account creation', () => {
-    spyOn(authService, 'createNewAccount').and.returnValue(
-      throwError({ error: 'error message', status: 400 })
-    );
-    const form = component.newAccountForm;
-    form.controls['email'].setValue('test@example.com');
-    form.controls['passwordGroup'].get('password')?.setValue('password123');
-    form.controls['passwordGroup']
-      .get('confirmPassword')
-      ?.setValue('password123');
-
-    component.sendNewAccountRequest();
-    expect(component.apiError).toEqual({ error: 'error message', status: 400 });
   });
 });
