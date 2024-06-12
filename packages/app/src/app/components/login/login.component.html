@@ -58,11 +58,35 @@
         Login
       </button>
 
-      <button type="button" class="btn btn-link">Create new account</button>
-
-      <button type="button" class="btn btn-danger mt-4">
-        Use Google <i class="bi bi-google"></i>
+      <button
+        type="button"
+        class="btn btn-link"
+        [routerLink]="['/new-account']"
+      >
+        Create new account
       </button>
+
+      <div class="mt-4">
+        <div
+          id="g_id_onload"
+          data-client_id="454177337065-ib91hg5mr0jehfm0b9glltbctjdq9tsi.apps.googleusercontent.com"
+          data-context="use"
+          data-ux_mode="popup"
+          data-nonce=""
+          data-auto_prompt="false"
+          data-callback="handleGoogleAuthResponse"
+        ></div>
+
+        <div
+          class="g_id_signin"
+          data-type="standard"
+          data-shape="pill"
+          data-theme="filled_blue"
+          data-text="signin_with"
+          data-size="large"
+          data-logo_alignment="left"
+        ></div>
+      </div>
     </div>
     <div *ngIf="apiError" class="alert alert-danger">
       {{ apiError.error.message }}

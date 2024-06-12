@@ -1,0 +1,100 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <form
+    [formGroup]="newAccountForm"
+    class="d-flex flex-column justify-content-center align-items-center border border-light rounded p-3 bg-light"
+    (ngSubmit)="sendNewAccountRequest()"
+  >
+    <legend class="text-center">New Account</legend>
+    <div class="mb-3">
+      <input
+        id="email"
+        class="form-control"
+        type="text"
+        formControlName="email"
+        placeholder="Email"
+      />
+
+      <div
+        *ngIf="
+          newAccountForm.get('email')?.invalid &&
+          (newAccountForm.get('email')?.dirty ||
+            newAccountForm.get('email')?.touched)
+        "
+        class="text-danger"
+      >
+        <div *ngIf="newAccountForm.get('email')?.errors?.['required']">
+          Email is required
+        </div>
+        <div *ngIf="newAccountForm.get('email')?.errors?.['email']">
+          Invalid email
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="passwordGroup">
+      <div class="mb-3">
+        <input
+          id="password"
+          class="form-control"
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+        />
+
+        <div
+          *ngIf="
+            newAccountForm.get(['passwordGroup', 'password'])?.invalid &&
+            (newAccountForm.get(['passwordGroup', 'password'])?.dirty ||
+              newAccountForm.get(['passwordGroup', 'password'])?.touched)
+          "
+          class="text-danger"
+        >
+          <div
+            *ngIf="newAccountForm.get(['passwordGroup', 'password'])?.errors?.['required']"
+          >
+            Password is required
+          </div>
+          <div
+            *ngIf="newAccountForm.get(['passwordGroup', 'password'])?.errors?.['minlength']"
+          >
+            At least 8 characters long
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input
+          id="confirm-password"
+          class="form-control"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Password"
+        />
+
+        <div
+          *ngIf="
+            newAccountForm.get(['passwordGroup', 'confirmPassword'])?.invalid &&
+            (newAccountForm.get(['passwordGroup', 'confirmPassword'])?.dirty ||
+              newAccountForm.get(['passwordGroup', 'confirmPassword'])?.touched)
+          "
+          class="text-danger"
+        >
+          Passwords don not match
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 d-flex flex-column">
+      <button class="btn btn-primary" [disabled]="newAccountForm.invalid">
+        Create new account
+      </button>
+
+      <button type="button" class="btn btn-link" [routerLink]="['/login']">
+        Back to login
+      </button>
+    </div>
+    <div *ngIf="apiError" class="alert alert-danger">
+      {{ apiError.error.message }}
+    </div>
+  </form>
+</div>

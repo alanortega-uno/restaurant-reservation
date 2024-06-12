@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   });
 
   apiError!: APIError;
+  gCredentials!: string | null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,7 +25,24 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.gCredentials = sessionStorage.getItem('gCredentials');
+
+    sessionStorage.removeItem('gCredentials');
+
+    if (this.gCredentials) {
+      this.authenticationService
+        .loginWithGoogle(this.gCredentials)
+        .subscribe((apiResponse) => {
+          if ('error' in apiResponse) {
+            this.apiError = apiResponse;
+            return;
+          }
+
+          this.router.navigate(['reservation']);
+        });
+    }
+  }
 
   async sendLoginRequest() {
     const email = this.loginForm.value.email ?? '';
@@ -44,4 +62,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['reservation']);
       });
   }
+
+  handleGoogleAuthResponse() {}
 }
