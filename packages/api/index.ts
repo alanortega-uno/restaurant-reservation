@@ -9,6 +9,8 @@ dotenv.config();
 import { DataSource } from "typeorm";
 import { AccountEntity } from "./src/entities/account";
 import { RefreshTokenEntity } from "./src/entities/refreshToken";
+import { ReservationEntity } from "./src/entities/reservation";
+import { TableEntity } from "./src/entities/table";
 
 const app: Express = express();
 
@@ -32,7 +34,12 @@ const main = async () => {
       username: "root",
       password: "Control123",
       database: "restaurant_reservations",
-      entities: [AccountEntity, RefreshTokenEntity],
+      entities: [
+        AccountEntity,
+        RefreshTokenEntity,
+        ReservationEntity,
+        TableEntity,
+      ],
       synchronize: true,
     });
 

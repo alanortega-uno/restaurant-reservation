@@ -5,7 +5,6 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AccountEntity } from "./account";
 
 @Entity("refresh_token")
 export class RefreshTokenEntity extends BaseEntity {
@@ -13,7 +12,7 @@ export class RefreshTokenEntity extends BaseEntity {
   id: number;
 
   @PrimaryColumn()
-  account_id: number;
+  accountId: number;
 
   @Column()
   token: string;

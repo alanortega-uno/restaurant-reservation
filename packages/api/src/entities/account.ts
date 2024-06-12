@@ -5,7 +5,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+import { ReservationEntity } from "./reservation";
 
 @Entity("account")
 export class AccountEntity extends BaseEntity {
@@ -21,10 +23,12 @@ export class AccountEntity extends BaseEntity {
   password: string;
 
   @Column({
-    name: "admin",
     default: false,
   })
-  is_admin: boolean;
+  isAdmin: boolean;
+
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.user)
+  reservations: ReservationEntity[];
 
   @CreateDateColumn()
   created_at: Date;

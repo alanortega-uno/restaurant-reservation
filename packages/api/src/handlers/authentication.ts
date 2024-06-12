@@ -40,7 +40,7 @@ export const createAccount = async (request: Request, response: Response) => {
         id: true,
         email: true,
         password: true,
-        is_admin: true,
+        isAdmin: true,
       },
       where: {
         email,
@@ -66,7 +66,7 @@ export const createAccount = async (request: Request, response: Response) => {
     const newAccount: Account = {
       id: newAccountEntity.id,
       email: newAccountEntity.email,
-      isAdmin: newAccountEntity.is_admin,
+      isAdmin: newAccountEntity.isAdmin,
     };
 
     const accessToken = generateAccessToken(newAccount);
@@ -98,7 +98,7 @@ export const login = async (request: Request, response: Response) => {
       id: true,
       email: true,
       password: true,
-      is_admin: true,
+      isAdmin: true,
     },
     where: {
       email,
@@ -118,7 +118,7 @@ export const login = async (request: Request, response: Response) => {
       const payload: Account = {
         id: account.id,
         email: account.email,
-        isAdmin: account.is_admin,
+        isAdmin: account.isAdmin,
       };
 
       if (!process.env.ACCESS_TOKEN_SECRET) {
@@ -168,7 +168,7 @@ export const googleAuth = async (request: Request, response: Response) => {
       id: true,
       email: true,
       password: true,
-      is_admin: true,
+      isAdmin: true,
     },
     where: {
       email,
@@ -188,7 +188,7 @@ export const googleAuth = async (request: Request, response: Response) => {
     const newAccount: Account = {
       id: newAccountEntity.id,
       email: newAccountEntity.email,
-      isAdmin: newAccountEntity.is_admin,
+      isAdmin: newAccountEntity.isAdmin,
     };
 
     const accessToken = generateAccessToken(newAccount);
@@ -207,7 +207,7 @@ export const googleAuth = async (request: Request, response: Response) => {
     const payload: Account = {
       id: account.id,
       email: account.email,
-      isAdmin: account.is_admin,
+      isAdmin: account.isAdmin,
     };
 
     if (!process.env.ACCESS_TOKEN_SECRET) {
@@ -249,7 +249,7 @@ export const newToken = async (request: Request, response: Response) => {
       token: true,
     },
     where: {
-      account_id: +accountId,
+      accountId: +accountId,
     },
   });
 
