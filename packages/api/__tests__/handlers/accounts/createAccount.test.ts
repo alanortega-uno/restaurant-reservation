@@ -24,7 +24,7 @@ jest.mock("../../../src/entities/reservation");
 jest.mock("bcryptjs");
 jest.mock("../../../src/utils/tokens");
 
-describe("Account Endpoint", () => {
+describe("createAccount", () => {
   let AppDataSource!: DataSource;
 
   beforeAll(async () => {
@@ -51,78 +51,78 @@ describe("Account Endpoint", () => {
     await AppDataSource.destroy();
   });
 
-  describe("createAccount", () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
+  beforeEach(() => {
+    jest.clearAllMocks();
+    process.env.ACCESS_TOKEN_SECRET = "testAccessTokenSecret";
+    process.env.REFRESH_TOKEN_SECRET = "testRefreshTokenSecret";
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return 400 if email or password is missing", async () => {
+    const response = await request(app).post("/auth/new-account").send({
+      email: "",
+      password: "",
     });
 
-    afterAll(() => {
-      jest.clearAllMocks();
+    expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+    expect(response.body.message).toBe("Send email and password");
+  });
+
+  it("should return 409 if account already exists", async () => {
+    (AccountEntity.findOne as jest.Mock).mockResolvedValue({
+      id: 1,
+      email: "test@example.com",
+      password: "hashedPassword",
     });
 
-    it("should return 400 if email or password is missing", async () => {
-      const response = await request(app).post("/auth/new-account").send({
-        email: "",
-        password: "",
-      });
-
-      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
-      expect(response.body.message).toBe("Send email and password");
+    const response = await request(app).post("/auth/new-account").send({
+      email: "test@example.com",
+      password: "password123",
     });
 
-    it("should return 409 if account already exists", async () => {
-      (AccountEntity.findOne as jest.Mock).mockResolvedValue({
+    expect(response.status).toBe(StatusCodes.CONFLICT);
+    expect(response.body.message).toBe("Account already exists");
+  });
+
+  it("should return 201 and tokens if account is created successfully", async () => {
+    (AccountEntity.findOne as jest.Mock).mockResolvedValue(null);
+    (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
+    (AccountEntity.create as jest.Mock).mockReturnValue({
+      save: jest.fn().mockResolvedValue({
         id: 1,
         email: "test@example.com",
-        password: "hashedPassword",
-      });
+        is_admin: false,
+      }),
+    });
+    (generateAccessToken as jest.Mock).mockReturnValue("access-token");
+    (generateRefreshToken as jest.Mock).mockReturnValue("refresh-token");
 
-      const response = await request(app).post("/auth/new-account").send({
-        email: "test@example.com",
-        password: "password123",
-      });
-
-      expect(response.status).toBe(StatusCodes.CONFLICT);
-      expect(response.body.message).toBe("Account already exists");
+    const response = await request(app).post("/auth/new-account").send({
+      email: "test@example.com",
+      password: "password123",
     });
 
-    it("should return 201 and tokens if account is created successfully", async () => {
-      (AccountEntity.findOne as jest.Mock).mockResolvedValue(null);
-      (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
-      (AccountEntity.create as jest.Mock).mockReturnValue({
-        save: jest.fn().mockResolvedValue({
-          id: 1,
-          email: "test@example.com",
-          is_admin: false,
-        }),
-      });
-      (generateAccessToken as jest.Mock).mockReturnValue("access-token");
-      (generateRefreshToken as jest.Mock).mockReturnValue("refresh-token");
+    expect(response.status).toBe(StatusCodes.CREATED);
+    expect(response.body).toEqual({
+      accessToken: "access-token",
+      refreshToken: "refresh-token",
+    });
+  });
 
-      const response = await request(app).post("/auth/new-account").send({
-        email: "test@example.com",
-        password: "password123",
-      });
+  it("should return 500 if there is a server error", async () => {
+    (AccountEntity.findOne as jest.Mock).mockRejectedValue(
+      new Error("Database error")
+    );
 
-      expect(response.status).toBe(StatusCodes.CREATED);
-      expect(response.body).toEqual({
-        accessToken: "access-token",
-        refreshToken: "refresh-token",
-      });
+    const response = await request(app).post("/auth/new-account").send({
+      email: "test@example.com",
+      password: "password123",
     });
 
-    it("should return 500 if there is a server error", async () => {
-      (AccountEntity.findOne as jest.Mock).mockRejectedValue(
-        new Error("Database error")
-      );
-
-      const response = await request(app).post("/auth/new-account").send({
-        email: "test@example.com",
-        password: "password123",
-      });
-
-      expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-      expect(response.body.message).toBe("Internal server error");
-    });
+    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(response.body.message).toBe("Internal server error");
   });
 });
