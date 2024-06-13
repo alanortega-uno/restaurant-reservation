@@ -10,12 +10,14 @@ import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
 import { RefreshTokenEntity } from "../entities/refreshToken";
 dotenv.config();
 
+// TODO: Remove
 export const test = (request: Request, response: Response) => {
   response.json({
     message: "test",
   });
 };
 
+// TODO: Remove
 export const getAllAccounts = async (request: Request, response: Response) => {
   const accounts = await AccountEntity.find();
 
@@ -154,52 +156,54 @@ export const googleAuth = async (request: Request, response: Response) => {
     response.status(StatusCodes.UNAUTHORIZED).json({
       message: "Send your credentials",
     });
-  }
-
-  const googleAccount = JSON.parse(atob(credentials.split(".")[1]));
-
-  const email: string = googleAccount.email;
-  const password: string = googleAccount.sub;
-
-  const account = await AccountEntity.findOne({
-    select: {
-      id: true,
-      email: true,
-      password: true,
-    },
-    where: {
-      email,
-    },
-  });
-
-  if (!account) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newAccountEntity = AccountEntity.create({
-      email,
-      password: hashedPassword,
-    });
-
-    await newAccountEntity.save();
-
-    const newAccount: Account = {
-      id: newAccountEntity.id,
-      email: newAccountEntity.email,
-      isAdmin: newAccountEntity.is_admin,
-    };
-
-    const accessToken = generateAccessToken(newAccount);
-    const refreshToken = generateRefreshToken(newAccount);
-
-    response.status(StatusCodes.CREATED).json({
-      accessToken,
-      refreshToken,
-    });
 
     return;
   }
 
   try {
+    const googleAccount = JSON.parse(atob(credentials.split(".")[1]));
+
+    const email: string = googleAccount.email;
+    const password: string = googleAccount.sub;
+
+    const account = await AccountEntity.findOne({
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+      where: {
+        email,
+      },
+    });
+
+    if (!account) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newAccountEntity = AccountEntity.create({
+        email,
+        password: hashedPassword,
+      });
+
+      await newAccountEntity.save();
+
+      const newAccount: Account = {
+        id: newAccountEntity.id,
+        email: newAccountEntity.email,
+        isAdmin: newAccountEntity.is_admin,
+      };
+
+      const accessToken = generateAccessToken(newAccount);
+      const refreshToken = generateRefreshToken(newAccount);
+
+      response.status(StatusCodes.CREATED).json({
+        accessToken,
+        refreshToken,
+      });
+
+      return;
+    }
+
     const payload: Account = {
       id: account.id,
       email: account.email,
@@ -240,44 +244,51 @@ export const newToken = async (request: Request, response: Response) => {
     return;
   }
 
-  const refreshTokenEntity = await RefreshTokenEntity.findOne({
-    select: {
-      token: true,
-    },
-    where: {
-      account_id: +accountId,
-    },
-  });
-
-  if (!refreshTokenEntity || refreshTokenEntity.token !== refreshToken) {
-    response.status(StatusCodes.FORBIDDEN).json({
-      message: "Token is not valid",
+  try {
+    const refreshTokenEntity = await RefreshTokenEntity.findOne({
+      select: {
+        token: true,
+      },
+      where: {
+        account_id: +accountId,
+      },
     });
 
-    return;
-  }
-
-  if (!process.env.REFRESH_TOKEN_SECRET) {
-    throw new Error("There is no REFRESH_TOKEN_SECRET");
-  }
-
-  jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-    (
-      error: jwt.VerifyErrors | null,
-      account: string | jwt.JwtPayload | undefined
-    ) => {
-      if (error) {
-        response.sendStatus(StatusCodes.FORBIDDEN);
-        return;
-      }
-
-      const accessToken = generateAccessToken(account as Account);
-
-      response.status(StatusCodes.OK).json({
-        accessToken,
+    if (!refreshTokenEntity || refreshTokenEntity.token !== refreshToken) {
+      response.status(StatusCodes.FORBIDDEN).json({
+        message: "Token is not valid",
       });
+
+      return;
     }
-  );
+
+    if (!process.env.REFRESH_TOKEN_SECRET) {
+      throw new Error("There is no REFRESH_TOKEN_SECRET");
+    }
+
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      (
+        error: jwt.VerifyErrors | null,
+        account: string | jwt.JwtPayload | undefined
+      ) => {
+        if (error) {
+          response.sendStatus(StatusCodes.FORBIDDEN);
+          return;
+        }
+
+        const accessToken = generateAccessToken(account as Account);
+
+        response.status(StatusCodes.OK).json({
+          accessToken,
+        });
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Internal server error",
+    });
+  }
 };
