@@ -92,26 +92,26 @@ export const login = async (request: Request, response: Response) => {
     return;
   }
 
-  const account = await AccountEntity.findOne({
-    select: {
-      id: true,
-      email: true,
-      password: true,
-    },
-    where: {
-      email,
-    },
-  });
-
-  if (!account) {
-    response.status(StatusCodes.NOT_FOUND).json({
-      message: "Email not found",
+  try {
+    const account = await AccountEntity.findOne({
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+      where: {
+        email,
+      },
     });
 
-    return;
-  }
+    if (!account) {
+      response.status(StatusCodes.NOT_FOUND).json({
+        message: "Email not found",
+      });
 
-  try {
+      return;
+    }
+
     if (await bcrypt.compare(password, account.password)) {
       const payload: Account = {
         id: account.id,

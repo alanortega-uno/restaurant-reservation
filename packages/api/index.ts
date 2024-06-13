@@ -52,6 +52,8 @@ const main = async () => {
     // routes
     app.use("/", routes);
 
+    if (process.env.NODE_ENV === "test") return;
+
     app.listen(port, () => {
       console.info(`[server]: Server is running at http://localhost:${port}`);
     });
