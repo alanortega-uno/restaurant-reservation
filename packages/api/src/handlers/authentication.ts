@@ -71,7 +71,7 @@ export const createAccount = async (request: Request, response: Response) => {
     };
 
     const accessToken = generateAccessToken(newAccount);
-    const refreshToken = generateRefreshToken(newAccount);
+    const refreshToken = await generateRefreshToken(newAccount);
 
     response.status(StatusCodes.CREATED).json({
       accessToken,
@@ -130,7 +130,7 @@ export const login = async (request: Request, response: Response) => {
       }
 
       const accessToken = generateAccessToken(payload);
-      const refreshToken = generateRefreshToken(payload);
+      const refreshToken = await generateRefreshToken(payload);
 
       response.json({
         accessToken,
@@ -194,7 +194,7 @@ export const googleAuth = async (request: Request, response: Response) => {
       };
 
       const accessToken = generateAccessToken(newAccount);
-      const refreshToken = generateRefreshToken(newAccount);
+      const refreshToken = await generateRefreshToken(newAccount);
 
       response.status(StatusCodes.CREATED).json({
         accessToken,
@@ -219,7 +219,7 @@ export const googleAuth = async (request: Request, response: Response) => {
     }
 
     const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken(payload);
+    const refreshToken = await generateRefreshToken(payload);
 
     response.status(StatusCodes.OK).json({
       accessToken,

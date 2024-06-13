@@ -4,7 +4,6 @@ dotenv.config();
 
 import { RefreshTokenEntity } from "../entities/refreshToken";
 import { Account } from "../interfaces/account.interfaces";
-import { AccountEntity } from "../entities/account";
 
 export const generateAccessToken = (payload: string | object | Buffer) => {
   if (!process.env.ACCESS_TOKEN_SECRET) {
