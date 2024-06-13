@@ -142,7 +142,8 @@ export const login = async (request: Request, response: Response) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    if (process.env.NODE_ENV !== "test") console.error(error);
+
     response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: "Internal server error",
     });
@@ -226,7 +227,8 @@ export const googleAuth = async (request: Request, response: Response) => {
       refreshToken,
     });
   } catch (error) {
-    console.error(error);
+    if (process.env.NODE_ENV !== "test") console.error(error);
+
     response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: "Internal server error",
     });
@@ -286,7 +288,8 @@ export const newToken = async (request: Request, response: Response) => {
       }
     );
   } catch (error) {
-    console.error(error);
+    if (process.env.NODE_ENV !== "test") console.error(error);
+
     response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: "Internal server error",
     });

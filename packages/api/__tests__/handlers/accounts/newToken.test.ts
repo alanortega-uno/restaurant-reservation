@@ -49,6 +49,7 @@ describe("newToken", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    process.env.ACCESS_TOKEN_SECRET = "testAccessTokenSecret";
     process.env.REFRESH_TOKEN_SECRET = "testRefreshTokenSecret";
   });
 
