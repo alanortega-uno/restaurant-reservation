@@ -12,6 +12,7 @@ import app from "../../index";
 
 describe("Account Endpoint", () => {
   let AppDataSource!: DataSource;
+
   beforeAll(async () => {
     AppDataSource = new DataSource({
       type: "mariadb",

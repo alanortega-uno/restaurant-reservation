@@ -12,7 +12,7 @@ export class RefreshTokenEntity extends BaseEntity {
   id: number;
 
   @PrimaryColumn()
-  accountId: number;
+  account_id: number;
 
   @Column()
   token: string;

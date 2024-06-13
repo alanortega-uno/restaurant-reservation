@@ -25,7 +25,7 @@ export class AccountEntity extends BaseEntity {
   @Column({
     default: false,
   })
-  isAdmin: boolean;
+  is_admin: boolean;
 
   @OneToMany(() => ReservationEntity, (reservation) => reservation.user)
   reservations: ReservationEntity[];

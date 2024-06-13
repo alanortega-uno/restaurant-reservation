@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from "typeorm";
 import { AccountEntity } from "./account";
 import { TableEntity } from "./table";
@@ -21,12 +22,18 @@ export class ReservationEntity {
   phone: string;
 
   @Column()
-  numberOfPeople: string;
+  number_of_people: string;
 
-  @ManyToOne(() => AccountEntity, (account) => account.reservations)
+  @ManyToOne(() => AccountEntity, (account) => account.reservations, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "user_id" })
   user: AccountEntity;
 
-  @ManyToOne(() => TableEntity, (table) => table.reservations)
+  @ManyToOne(() => TableEntity, (table) => table.reservations, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "table_id" })
   table: TableEntity;
 
   @CreateDateColumn()

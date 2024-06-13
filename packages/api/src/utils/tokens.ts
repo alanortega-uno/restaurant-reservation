@@ -24,7 +24,7 @@ export const generateRefreshToken = async (account: Account) => {
   const refreshToken = jwt.sign(account, process.env.REFRESH_TOKEN_SECRET);
 
   const refreshTokenEntity = RefreshTokenEntity.create({
-    accountId: account.id,
+    account_id: account.id,
     token: refreshToken,
   });
 
