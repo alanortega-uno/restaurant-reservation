@@ -28,12 +28,12 @@ app.use(express.json());
 const main = async () => {
   try {
     const AppDataSource = new DataSource({
-      type: "mariadb",
-      host: "localhost",
-      port: 3306,
-      username: "root",
-      password: "Control123",
-      database: "restaurant_reservations",
+      type: (process.env.DB_TYPE as "mariadb" | "mysql") ?? "mariadb",
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT) || 3306,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [
         AccountEntity,
         RefreshTokenEntity,
@@ -47,7 +47,7 @@ const main = async () => {
 
     console.info("[database]: Data Source has been initialized");
 
-    const port = process.env.PORT || 4000;
+    const port = process.env.APP_PORT || 4000;
 
     // routes
     app.use("/", routes);
@@ -55,7 +55,7 @@ const main = async () => {
     if (process.env.NODE_ENV === "test") return;
 
     app.listen(port, () => {
-      console.info(`[server]: Server is running at http://localhost:${port}`);
+      console.info(`[server]: Server is running at port ${port}`);
     });
   } catch (error) {
     console.error(error);
