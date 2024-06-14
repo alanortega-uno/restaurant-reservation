@@ -47,7 +47,7 @@ const main = async () => {
 
     console.info("[database]: Data Source has been initialized");
 
-    const port = process.env.APP_PORT || 4000;
+    const port = process.env.PORT || 4000;
 
     // routes
     app.use("/", routes);
