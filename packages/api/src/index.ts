@@ -7,10 +7,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { DataSource } from "typeorm";
-import { AccountEntity } from "./src/entities/account";
-import { RefreshTokenEntity } from "./src/entities/refreshToken";
-import { ReservationEntity } from "./src/entities/reservation";
-import { TableEntity } from "./src/entities/table";
+import { AccountEntity } from "./entities/account";
+import { RefreshTokenEntity } from "./entities/refreshToken";
+import { ReservationEntity } from "./entities/reservation";
+import { TableEntity } from "./entities/table";
 
 const app: Express = express();
 

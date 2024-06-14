@@ -1,6 +1,6 @@
 import express from "express";
-import { authRouter } from "./src/routes/authentication";
-import { defaultRoute } from "./src/routes/default";
+import { authRouter } from "./routes/authentication";
+import { defaultRoute } from "./routes/default";
 
 export const routes = express.Router();
 
