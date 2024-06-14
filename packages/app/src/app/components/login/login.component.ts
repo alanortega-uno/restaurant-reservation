@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -62,6 +61,4 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['reservation']);
       });
   }
-
-  handleGoogleAuthResponse() {}
 }

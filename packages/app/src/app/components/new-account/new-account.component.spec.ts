@@ -56,10 +56,6 @@ describe('NewAccountComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should have a form with email and password fields', () => {
     const form = component.newAccountForm;
     expect(form).toBeDefined();

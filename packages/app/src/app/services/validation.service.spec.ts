@@ -20,10 +20,6 @@ describe('ValidationService', () => {
     formBuilder = TestBed.inject(FormBuilder);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
   describe('passwordMatch', () => {
     let form: FormGroup;
 

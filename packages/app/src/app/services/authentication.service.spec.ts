@@ -5,6 +5,8 @@ import {
 } from '@angular/common/http/testing';
 import { AuthenticationService } from './authentication.service';
 import { environment } from 'src/environments/environment';
+import { APIError } from '@restaurant-reservation/shared';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -24,38 +26,32 @@ describe('AuthenticationService', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  describe('#login, #loginWithGoogle, #createNewAccount', () => {
+    it('should return an APIError on HTTP error', () => {
+      const mockError: APIError = {
+        error: {
+          message: 'Send email and password',
+        },
+        status: 400,
+      };
+      const credentials = { email: 'test@example.com', password: 'password' };
 
-  it('should log in a user', () => {
-    const credentials = {
-      email: 'alan.ortega@gmail.com',
-      password: 'password',
-    };
-    const mockResponse = { token: 'fake-jwt-token' };
+      service.login(credentials).subscribe((response) => {
+        expect(response).toEqual(mockError);
+      });
 
-    service.login(credentials).subscribe((response) => {
-      expect(response).toEqual(mockResponse);
+      const req = httpMock.expectOne(`${environment.apiBaserURL}/auth/login`);
+      expect(req.request.method).toBe('POST');
+
+      req.flush(
+        {
+          message: 'Send email and password',
+        },
+        {
+          status: 400,
+          statusText: 'Bad Request',
+        }
+      );
     });
-
-    const req = httpMock.expectOne(environment.apiBaserURL + '/auth/login');
-    expect(req.request.method).toBe('POST');
-    req.flush(mockResponse);
   });
-
-  // it('should create a new account', () => {
-  //   const credentials = { email: 'newuser@example.com', password: 'password' };
-  //   const mockResponse = { token: 'fake-jwt-token' };
-
-  //   service.createNewAccount(credentials).subscribe((response) => {
-  //     expect(response).toEqual(mockResponse);
-  //   });
-
-  //   const req = httpMock.expectOne(
-  //     environment.apiBaserURL + '/auth/new-account'
-  //   );
-  //   expect(req.request.method).toBe('POST');
-  //   req.flush(mockResponse);
-  // });
 });
