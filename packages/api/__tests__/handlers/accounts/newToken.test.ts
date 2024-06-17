@@ -14,7 +14,7 @@ import {
   generateRefreshToken,
 } from "../../../src/utils/tokens";
 
-import app from "../../../index";
+import app from "../../../src/index";
 
 // Mock the dependencies
 jest.mock("../../../src/entities/refreshToken");
