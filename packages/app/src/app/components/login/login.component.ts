@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   apiError!: APIError;
   gCredentials!: string | null;
 
+  sendingAPIRequest = false;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit {
         .loginWithGoogle(this.gCredentials)
         .subscribe((apiResponse) => {
           if ('error' in apiResponse) {
+            this.sendingAPIRequest = true;
             this.apiError = apiResponse;
             return;
           }
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
   }
 
   async sendLoginRequest() {
+    this.sendingAPIRequest = true;
     const email = this.loginForm.value.email ?? '';
     const password = this.loginForm.value.password ?? '';
 
@@ -54,6 +57,7 @@ export class LoginComponent implements OnInit {
       })
       .subscribe((apiResponse) => {
         if ('error' in apiResponse) {
+          this.sendingAPIRequest = false;
           this.apiError = apiResponse;
           return;
         }

@@ -54,14 +54,24 @@
     </div>
 
     <div class="mb-3 d-flex flex-column">
-      <button class="btn btn-primary" [disabled]="loginForm.invalid">
-        Login
+      <button
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid || sendingAPIRequest"
+      >
+        <span
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+          aria-hidden="true"
+          *ngIf="sendingAPIRequest"
+        ></span>
+        Login<span *ngIf="sendingAPIRequest">...</span>
       </button>
 
       <button
         type="button"
         class="btn btn-link"
         [routerLink]="['/new-account']"
+        [disabled]="sendingAPIRequest"
       >
         Create new account
       </button>
