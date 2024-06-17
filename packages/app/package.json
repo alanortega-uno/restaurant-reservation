@@ -1,11 +1,11 @@
 {
-  "name": "restaurant-reservation",
+  "name": "@restaurant-reservation/app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "buildStg": "ng build --c=stg",
+    "build:stg": "ng build --c=stg",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
