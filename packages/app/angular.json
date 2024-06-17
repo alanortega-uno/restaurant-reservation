@@ -30,7 +30,13 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules",
+                "../../node_modules"
+              ]
+            }  
           },
           "configurations": {
             "production": {
