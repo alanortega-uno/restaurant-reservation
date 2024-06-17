@@ -15,8 +15,8 @@ import { TableEntity } from "./entities/table";
 const app: Express = express();
 
 const allowedOrigins = [
-  "http://localhost:4200",
-  "http://BOL-MC-240604D.local:3000",
+  process.env.ALLOWED_ORIGIN_1 ?? "http://localhost:4200",
+  process.env.ALLOWED_ORIGIN_2 ?? "http://localhost:4200",
 ];
 const corsOptions: cors.CorsOptions = {
   origin: allowedOrigins,
