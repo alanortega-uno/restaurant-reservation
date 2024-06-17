@@ -1,10 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 
-import { routes } from "./routes";
-
 import dotenv from "dotenv";
 dotenv.config();
+
+import { routes } from "./routes";
 
 import { DataSource } from "typeorm";
 import { AccountEntity } from "./entities/account";
@@ -12,16 +12,24 @@ import { RefreshTokenEntity } from "./entities/refreshToken";
 import { ReservationEntity } from "./entities/reservation";
 import { TableEntity } from "./entities/table";
 
+import expressWinston from "express-winston";
+import { logger, internalErrorLogger } from "./logger";
+
 const app: Express = express();
 
 const allowedOrigins = [
   process.env.ALLOWED_ORIGIN_1 ?? "http://localhost:4200",
-  process.env.ALLOWED_ORIGIN_2 ?? "http://BOL-MC-240604D.local:3000",
+  process.env.ALLOWED_ORIGIN_2 ?? "http://localhost:4200",
 ];
 const corsOptions: cors.CorsOptions = {
   origin: allowedOrigins,
 };
-
+app.use(
+  expressWinston.logger({
+    winstonInstance: logger,
+    statusLevels: true,
+  })
+);
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -51,6 +59,8 @@ const main = async () => {
 
     // routes
     app.use("/", routes);
+
+    app.use(internalErrorLogger);
 
     if (process.env.NODE_ENV === "test") return;
 
