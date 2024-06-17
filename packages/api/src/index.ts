@@ -16,7 +16,7 @@ const app: Express = express();
 
 const allowedOrigins = [
   process.env.ALLOWED_ORIGIN_1 ?? "http://localhost:4200",
-  process.env.ALLOWED_ORIGIN_2 ?? "http://localhost:4200",
+  process.env.ALLOWED_ORIGIN_2 ?? "http://BOL-MC-240604D.local:3000",
 ];
 const corsOptions: cors.CorsOptions = {
   origin: allowedOrigins,
