@@ -32,7 +32,7 @@ describe('AuthenticationService', () => {
         error: {
           message: 'Send email and password',
         },
-        status: 400,
+        statusCode: 400,
       };
       const credentials = { email: 'test@example.com', password: 'password' };
 

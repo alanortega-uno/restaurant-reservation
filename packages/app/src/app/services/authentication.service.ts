@@ -44,7 +44,7 @@ export class AuthenticationService {
 
     const apiError: APIError = {
       error: error.error,
-      status: error.status,
+      statusCode: error.status,
     };
 
     return of(apiError);
