@@ -123,6 +123,6 @@ describe("createAccount", () => {
     });
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-    expect(response.body.message).toBe("Internal server error");
+    expect(response.body.message).toBe("Database error");
   });
 });

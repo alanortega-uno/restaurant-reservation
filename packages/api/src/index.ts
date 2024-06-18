@@ -15,6 +15,8 @@ import { TableEntity } from "./entities/table";
 import expressWinston from "express-winston";
 import { logger, internalErrorLogger } from "./logger";
 
+import { errorHandler } from "./middleware/error-handler";
+
 const app: Express = express();
 
 const allowedOrigins = [
@@ -61,6 +63,8 @@ const main = async () => {
     app.use("/", routes);
 
     app.use(internalErrorLogger);
+
+    app.use(errorHandler);
 
     if (process.env.NODE_ENV === "test") return;
 

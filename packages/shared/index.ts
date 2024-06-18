@@ -1,4 +1,4 @@
 import { User } from "./interfaces/users";
-import { APIError } from "./interfaces/errors";
+import { APIError, ApiError } from "./interfaces/errors";
 
-export { User, APIError };
+export { User, APIError, ApiError };

@@ -1,4 +1,8 @@
 export interface APIError {
   error: any;
-  status: number;
+  statusCode: number;
+}
+
+export interface ApiError extends Error {
+  statusCode: number;
 }

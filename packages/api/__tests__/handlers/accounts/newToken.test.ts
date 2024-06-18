@@ -134,6 +134,6 @@ describe("newToken", () => {
       .send({ token: "valid-token" });
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-    expect(response.body.message).toBe("Internal server error");
+    expect(response.body.message).toBe("There is no REFRESH_TOKEN_SECRET");
   });
 });

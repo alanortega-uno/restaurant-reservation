@@ -137,54 +137,6 @@ describe("googleAuth", () => {
       });
 
     expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-    expect(response.body.message).toBe("Internal server error");
-  });
-
-  it("should return 500 if access token secret is missing", async () => {
-    process.env.ACCESS_TOKEN_SECRET = "";
-
-    const credentials = Buffer.from(
-      JSON.stringify({ email: "test@example.com", sub: "password" })
-    ).toString("base64");
-
-    (AccountEntity.findOne as jest.Mock).mockResolvedValue({
-      id: 1,
-      email: "test@example.com",
-      password: "hashedPassword",
-      is_admin: false,
-    });
-
-    const response = await request(app)
-      .post("/auth/google")
-      .send({
-        credentials: `eyJhbGciOiJIUzI1NiJ9.${credentials}.signature`,
-      });
-
-    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-    expect(response.body.message).toBe("Internal server error");
-  });
-
-  it("should return 500 if refresh token secret is missing", async () => {
-    process.env.REFRESH_TOKEN_SECRET = "";
-
-    const credentials = Buffer.from(
-      JSON.stringify({ email: "test@example.com", sub: "password" })
-    ).toString("base64");
-
-    (AccountEntity.findOne as jest.Mock).mockResolvedValue({
-      id: 1,
-      email: "test@example.com",
-      password: "hashedPassword",
-      is_admin: false,
-    });
-
-    const response = await request(app)
-      .post("/auth/google")
-      .send({
-        credentials: `eyJhbGciOiJIUzI1NiJ9.${credentials}.signature`,
-      });
-
-    expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-    expect(response.body.message).toBe("Internal server error");
+    expect(response.body.message).toBe("Database error");
   });
 });

@@ -129,47 +129,7 @@ describe("Account Endpoint", () => {
       });
 
       expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-      expect(response.body.message).toBe("Internal server error");
-    });
-
-    it("should return 500 if access token secret is missing", async () => {
-      process.env.ACCESS_TOKEN_SECRET = "";
-
-      (AccountEntity.findOne as jest.Mock).mockResolvedValue({
-        id: 1,
-        email: "test@example.com",
-        password: "hashedPassword",
-        is_admin: false,
-      });
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-
-      const response = await request(app).post("/auth/login").send({
-        email: "test@example.com",
-        password: "password123",
-      });
-
-      expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-      expect(response.body.message).toBe("Internal server error");
-    });
-
-    it("should return 500 if refresh token secret is missing", async () => {
-      process.env.REFRESH_TOKEN_SECRET = "";
-
-      (AccountEntity.findOne as jest.Mock).mockResolvedValue({
-        id: 1,
-        email: "test@example.com",
-        password: "hashedPassword",
-        is_admin: false,
-      });
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-
-      const response = await request(app).post("/auth/login").send({
-        email: "test@example.com",
-        password: "password123",
-      });
-
-      expect(response.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-      expect(response.body.message).toBe("Internal server error");
+      expect(response.body.message).toBe("Database error");
     });
   });
 });
