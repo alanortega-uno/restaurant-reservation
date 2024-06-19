@@ -10,8 +10,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { NewAccountComponent } from './components/new-account/new-account.component';
 
+import { SocketService } from './services/socket.service';
+
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ReservationComponent, NewAccountComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    ReservationComponent,
+    NewAccountComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -19,7 +26,7 @@ import { NewAccountComponent } from './components/new-account/new-account.compon
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [SocketService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,5 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -18,6 +20,26 @@ import { logger, internalErrorLogger } from "./logger";
 import { errorHandler } from "./middleware/error-handler";
 
 const app: Express = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.ALLOWED_ORIGIN_1 ?? "http://localhost:4200",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  socket.on("message", (msg) => {
+    console.log("message: " + msg);
+    io.emit("message", "update your tables");
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
 
 const allowedOrigins = [
   process.env.ALLOWED_ORIGIN_1 ?? "http://localhost:4200",
@@ -68,8 +90,12 @@ const main = async () => {
 
     if (process.env.NODE_ENV === "test") return;
 
-    app.listen(port, () => {
-      console.info(`[server]: Server is running at port ${port}`);
+    // app.listen(port, () => {
+    //   console.info(`[server]: Server is running at port ${port}`);
+    // });
+
+    httpServer.listen(port, () => {
+      console.log(`[server]: Server is running at port ${port}`);
     });
   } catch (error) {
     console.error(error);
