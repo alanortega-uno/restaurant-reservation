@@ -12,7 +12,10 @@ export class AuthenticationService {
 
   login(credentials: { email: string; password: string }) {
     return this.http
-      .post(environment.apiBaserURL + '/auth/login', credentials)
+      .post<{ accessToken: string; refreshToken: string }>(
+        environment.apiBaserURL + '/auth/login',
+        credentials
+      )
       .pipe(catchError(this.handleHttpError));
   }
 

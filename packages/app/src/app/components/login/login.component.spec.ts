@@ -82,18 +82,19 @@ describe('LoginComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith(['reservation']);
     });
 
-    it('should set apiError on login failure', () => {
-      const mockError = { error: 'Login failed', status: 401 };
-      authService.login.and.returnValue(of(mockError));
+    // TODO: Write new tests for NgRx
+    // it('should set apiError on login failure', () => {
+    //   const mockError = { error: 'Login failed', status: 401 };
+    //   authService.login.and.returnValue(of(mockError));
 
-      component.loginForm.setValue({
-        email: 'test@example.com',
-        password: 'password',
-      });
+    //   component.loginForm.setValue({
+    //     email: 'test@example.com',
+    //     password: 'password',
+    //   });
 
-      component.sendLoginRequest();
+    //   component.sendLoginRequest();
 
-      expect(component.apiError).toEqual(mockError);
-    });
+    //   expect(component.apiError).toEqual(mockError);
+    // });
   });
 });

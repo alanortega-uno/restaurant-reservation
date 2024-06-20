@@ -1,4 +1,7 @@
-<div class="d-flex justify-content-center align-items-center vh-100">
+<div
+  class="d-flex justify-content-center align-items-center vh-100"
+  *ngIf="apiRequestStatus$ | async as apiRequestStatus"
+>
   <form
     [formGroup]="loginForm"
     class="d-flex flex-column justify-content-center align-items-center border border-light rounded p-3 bg-light"
@@ -56,22 +59,22 @@
     <div class="mb-3 d-flex flex-column">
       <button
         class="btn btn-primary"
-        [disabled]="loginForm.invalid || sendingAPIRequest"
+        [disabled]="loginForm.invalid || apiRequestStatus.status === 'loading'"
       >
         <span
           class="spinner-grow spinner-grow-sm"
           role="status"
           aria-hidden="true"
-          *ngIf="sendingAPIRequest"
+          *ngIf="apiRequestStatus.status === 'loading'"
         ></span>
-        Login<span *ngIf="sendingAPIRequest">...</span>
+        Login<span *ngIf="apiRequestStatus.status === 'loading'">...</span>
       </button>
 
       <button
         type="button"
         class="btn btn-link"
         [routerLink]="['/new-account']"
-        [disabled]="sendingAPIRequest"
+        [disabled]="apiRequestStatus.status === 'loading'"
       >
         Create new account
       </button>
@@ -98,8 +101,8 @@
         ></div>
       </div>
     </div>
-    <div *ngIf="apiError" class="alert alert-danger">
-      {{ apiError.error.message }}
+    <div *ngIf="apiRequestStatus.error" class="alert alert-danger">
+      {{ apiRequestStatus.error.message }}
     </div>
   </form>
 </div>

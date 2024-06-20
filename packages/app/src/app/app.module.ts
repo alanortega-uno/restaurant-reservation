@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -11,6 +15,9 @@ import { ReservationComponent } from './components/reservation/reservation.compo
 import { NewAccountComponent } from './components/new-account/new-account.component';
 
 import { SocketService } from './services/socket.service';
+
+import { authenticationReducer } from './state/authentication/authentication.reducer';
+import { AuthenticationEffects } from './state/authentication/authentication.effects';
 
 @NgModule({
   declarations: [
@@ -25,6 +32,9 @@ import { SocketService } from './services/socket.service';
     NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
+    StoreModule.forRoot({ authentication: authenticationReducer }),
+    EffectsModule.forRoot([AuthenticationEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25 }),
   ],
   providers: [SocketService],
   bootstrap: [AppComponent],

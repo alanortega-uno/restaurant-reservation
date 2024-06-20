@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { APIError } from '@restaurant-reservation/shared';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Store } from '@ngrx/store';
+import { ApiRequestStatus } from '@restaurant-reservation/shared';
 import { ValidationService } from 'src/app/services/validation.service';
+import * as AuthenticationActions from '../../state/authentication/authentication.actions';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import {
+  selectApiRequestStatus,
+  selectTokens,
+} from 'src/app/state/authentication/authentication.selectors';
 
 @Component({
   selector: 'app-new-account',
   templateUrl: './new-account.component.html',
 })
-export class NewAccountComponent implements OnInit {
+export class NewAccountComponent implements OnInit, OnDestroy {
   newAccountForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     passwordGroup: this.formBuilder.group(
@@ -26,31 +32,49 @@ export class NewAccountComponent implements OnInit {
     ),
   });
 
-  apiError!: APIError;
+  tokens$: Observable<{
+    accessToken: string | null;
+    refreshToken: string | null;
+  }>;
+
+  apiRequestStatus$: Observable<{ status: ApiRequestStatus; error: any }>;
+
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
     private validationService: ValidationService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private store: Store
+  ) {
+    this.tokens$ = this.store.select(selectTokens);
+
+    this.tokens$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ accessToken, refreshToken }) => {
+        if (accessToken && refreshToken) {
+          this.router.navigate(['reservation']);
+        }
+      });
+
+    this.apiRequestStatus$ = this.store.select(selectApiRequestStatus);
+  }
 
   ngOnInit(): void {
-    console.log(this.newAccountForm.get(['passwordGroup', 'confirmPassword']));
+    this.store.dispatch(AuthenticationActions.clearError());
   }
 
   sendNewAccountRequest() {
     const email = this.newAccountForm.value.email ?? '';
     const password = this.newAccountForm.value.passwordGroup.password ?? '';
 
-    this.authenticationService
-      .createNewAccount({ email, password })
-      .subscribe((apiResponse) => {
-        if ('error' in apiResponse) {
-          this.apiError = apiResponse;
-          return;
-        }
+    this.store.dispatch(
+      AuthenticationActions.createAccount({ email, password })
+    );
+  }
 
-        this.router.navigate(['reservation']);
-      });
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
