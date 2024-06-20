@@ -11,7 +11,7 @@ export const generateAccessToken = (payload: string | object | Buffer) => {
   }
 
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15s",
+    expiresIn: "30m",
   });
 };
 

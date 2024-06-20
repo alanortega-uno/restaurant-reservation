@@ -1,12 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  BaseEntity,
+} from "typeorm";
 import { ReservationEntity } from "./reservation";
 
 @Entity("table")
-export class TableEntity {
+export class TableEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   name: string;
 
   @Column()
