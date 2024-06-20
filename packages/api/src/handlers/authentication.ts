@@ -123,6 +123,7 @@ export const login = async (
   const refreshToken = await generateRefreshToken(payload);
 
   response.json({
+    email: account.email,
     accessToken,
     refreshToken,
   });
@@ -178,6 +179,7 @@ export const googleAuth = async (
     const refreshToken = await generateRefreshToken(newAccount);
 
     response.status(StatusCodes.CREATED).json({
+      email,
       accessToken,
       refreshToken,
     });
@@ -195,6 +197,7 @@ export const googleAuth = async (
   const refreshToken = await generateRefreshToken(payload);
 
   response.status(StatusCodes.OK).json({
+    email: account.email,
     accessToken,
     refreshToken,
   });
