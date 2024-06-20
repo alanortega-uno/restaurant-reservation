@@ -29,5 +29,5 @@
 		// "baseUrl": "."
 	},
 	"exclude": ["node_modules"],
-	"include": ["./src/**/*.tsx", "./src/**/*.ts", "src/entities/account.ts"]
+	"include": ["./src/**/*.tsx", "./src/**/*.ts", "src/entities/account.ts"],
 }

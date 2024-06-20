@@ -7,7 +7,7 @@ export class TableEntity {
   id: number;
 
   @Column()
-  number: number;
+  name: string;
 
   @Column()
   capacity: number;
