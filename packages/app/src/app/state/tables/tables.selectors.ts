@@ -1,10 +1,9 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from '../app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TableState } from './tables.reducer';
 
-export const selectTables = (state: AppState) => state.tables;
+export const selectTablesState = createFeatureSelector<TableState>('tables');
 
 export const selectAllTables = createSelector(
-  selectTables,
+  selectTablesState,
   (state: TableState) => state.tables
 );
