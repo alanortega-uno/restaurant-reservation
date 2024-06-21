@@ -7,6 +7,11 @@ import * as AuthenticationActions from './authentication.actions';
 
 @Injectable()
 export class AuthenticationEffects {
+  constructor(
+    private actions$: Actions,
+    private authenticationService: AuthenticationService
+  ) {}
+
   createAccount$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthenticationActions.createAccount),
@@ -14,9 +19,6 @@ export class AuthenticationEffects {
         this.authenticationService
           .createNewAccount({ email: action.email, password: action.password })
           .pipe(
-            tap((response) => {
-              console.log(response);
-            }),
             map((response: any) => {
               if (response.error) {
                 return AuthenticationActions.loginFailure({
@@ -89,8 +91,15 @@ export class AuthenticationEffects {
     )
   );
 
-  constructor(
-    private actions$: Actions,
-    private authenticationService: AuthenticationService
-  ) {}
+  loginSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthenticationActions.loginSuccess),
+        tap((action) => {
+          sessionStorage.setItem('accessToken', action.accessToken);
+          sessionStorage.setItem('refreshToken', action.refreshToken);
+        })
+      ),
+    { dispatch: false }
+  );
 }

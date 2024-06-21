@@ -4,7 +4,6 @@ import * as AuthenticationActions from './authentication.actions';
 import { ApiRequestStatus } from '@restaurant-reservation/shared';
 
 export interface AuthenticationState {
-  id: number | null;
   email: string | null;
   accessToken: string | null;
   refreshToken: string | null;
@@ -13,7 +12,6 @@ export interface AuthenticationState {
 }
 
 export const initialState: AuthenticationState = {
-  id: null,
   email: null,
   accessToken: null,
   refreshToken: null,

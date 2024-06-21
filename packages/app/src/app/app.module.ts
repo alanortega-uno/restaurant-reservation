@@ -18,6 +18,8 @@ import { SocketService } from './services/socket.service';
 
 import { authenticationReducer } from './state/authentication/authentication.reducer';
 import { AuthenticationEffects } from './state/authentication/authentication.effects';
+import { tableReducer } from './state/tables/tables.reducer';
+import { TableEffects } from './state/tables/tables.effects';
 
 @NgModule({
   declarations: [
@@ -32,8 +34,11 @@ import { AuthenticationEffects } from './state/authentication/authentication.eff
     NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({ authentication: authenticationReducer }),
-    EffectsModule.forRoot([AuthenticationEffects]),
+    StoreModule.forRoot({
+      authentication: authenticationReducer,
+      tables: tableReducer,
+    }),
+    EffectsModule.forRoot([AuthenticationEffects, TableEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
   ],
   providers: [SocketService],
