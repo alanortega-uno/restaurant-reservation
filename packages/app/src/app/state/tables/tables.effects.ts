@@ -4,7 +4,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as TablesActions from './tables.actions';
 import { catchError, map, mergeMap, of, withLatestFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as AuthenticationSelectors from 'src/app/state/authentication/authentication.selectors';
 
 @Injectable()
 export class TableEffects {
@@ -17,10 +16,9 @@ export class TableEffects {
   tables$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TablesActions.loadTables),
-      withLatestFrom(this.store.select(AuthenticationSelectors.selectTokens)),
-      mergeMap(([action, tokens]) => {
-        const { accessToken } = tokens;
-        return this.tableService.getAllTables(accessToken ?? '').pipe(
+      withLatestFrom(of(sessionStorage.getItem('accessToken'))),
+      mergeMap(([action, accessToken]) =>
+        this.tableService.getAllTables(accessToken ?? '').pipe(
           map(
             (response: any) => {
               console.log('[table.effects] response', response);
@@ -38,8 +36,8 @@ export class TableEffects {
               of(TablesActions.loadTablesFailure({ error }))
             )
           )
-        );
-      })
+        )
+      )
     )
   );
 }

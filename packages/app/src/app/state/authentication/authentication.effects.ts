@@ -27,6 +27,7 @@ export class AuthenticationEffects {
               }
 
               return AuthenticationActions.loginSuccess({
+                email: response.email,
                 accessToken: response.accessToken,
                 refreshToken: response.refreshToken,
               });
@@ -47,6 +48,7 @@ export class AuthenticationEffects {
           .login({ email: action.email, password: action.password })
           .pipe(
             map((response: any) => {
+              console.log(response);
               if (response.error) {
                 return AuthenticationActions.loginFailure({
                   error: response.error,
@@ -54,6 +56,7 @@ export class AuthenticationEffects {
               }
 
               return AuthenticationActions.loginSuccess({
+                email: response.email,
                 accessToken: response.accessToken,
                 refreshToken: response.refreshToken,
               });
@@ -79,6 +82,7 @@ export class AuthenticationEffects {
             }
 
             return AuthenticationActions.loginSuccess({
+              email: response.email,
               accessToken: response.accessToken,
               refreshToken: response.refreshToken,
             });
@@ -96,6 +100,7 @@ export class AuthenticationEffects {
       this.actions$.pipe(
         ofType(AuthenticationActions.loginSuccess),
         tap((action) => {
+          sessionStorage.setItem('email', action.email);
           sessionStorage.setItem('accessToken', action.accessToken);
           sessionStorage.setItem('refreshToken', action.refreshToken);
         })

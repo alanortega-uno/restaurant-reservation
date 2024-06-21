@@ -38,8 +38,9 @@ export const authenticationReducer = createReducer(
   })),
   on(
     AuthenticationActions.loginSuccess,
-    (state, { accessToken, refreshToken }) => ({
+    (state, { email, accessToken, refreshToken }) => ({
       ...state,
+      email,
       accessToken,
       refreshToken,
       error: null,
