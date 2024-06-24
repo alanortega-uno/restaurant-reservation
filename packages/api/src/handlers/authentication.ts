@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 import { Account } from "../interfaces/account.interfaces";
 import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
 import { RefreshTokenEntity } from "../entities/refreshToken";
-import { ServerError } from "../models/error";
+import { ServerError } from "../utils/server-error";
 dotenv.config();
 
 // TODO: Remove

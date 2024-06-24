@@ -8,7 +8,7 @@ dotenv.config();
 import { RequestWithAccount } from "../interfaces/request.interfaces";
 import { Account } from "../interfaces/account.interfaces";
 
-import { ServerError } from "../models/error";
+import { ServerError } from "../utils/server-error";
 
 export const authorizeToken = (
   request: Request,

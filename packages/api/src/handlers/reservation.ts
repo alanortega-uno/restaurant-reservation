@@ -6,7 +6,7 @@ import { TableEntity } from "../entities/table";
 import { ReservationEntity } from "../entities/reservation";
 import { RequestWithAccount } from "../interfaces/request.interfaces";
 import { AccountEntity } from "../entities/account";
-import { ServerError } from "../models/error";
+import { ServerError } from "../utils/server-error";
 import { validate } from "class-validator";
 dotenv.config();
 
