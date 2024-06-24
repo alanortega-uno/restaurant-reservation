@@ -8,14 +8,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <script src="https://accounts.google.com/gsi/client" async></script>
     <script>
-      // function decodeJWTToken(token) {
-      //   return JSON.parse(atob(token.split(".")[1]));
-      // }
-
       function handleGoogleAuthResponse(response) {
-        // console.log(response);
-        // const responsePayload = decodeJWTToken(response.credential);
-
         sessionStorage.setItem("gCredentials", response.credential);
         window.location.reload();
       }
