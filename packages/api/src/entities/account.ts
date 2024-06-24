@@ -27,7 +27,7 @@ export class AccountEntity extends BaseEntity {
   })
   is_admin: boolean;
 
-  @OneToMany(() => ReservationEntity, (reservation) => reservation.user)
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.account)
   reservations: ReservationEntity[];
 
   @CreateDateColumn()

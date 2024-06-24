@@ -6,29 +6,35 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  BaseEntity,
 } from "typeorm";
 import { AccountEntity } from "./account";
 import { TableEntity } from "./table";
+import { IsString, IsPhoneNumber, IsInt, Min } from "class-validator";
 
 @Entity("reservation")
-export class ReservationEntity {
+export class ReservationEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
+  @IsString()
   name: string;
 
   @Column()
+  @IsPhoneNumber()
   phone: string;
 
   @Column()
-  number_of_people: string;
+  @IsInt()
+  @Min(1)
+  number_of_people: number;
 
   @ManyToOne(() => AccountEntity, (account) => account.reservations, {
     onDelete: "CASCADE",
   })
-  @JoinColumn({ name: "user_id" })
-  user: AccountEntity;
+  @JoinColumn({ name: "account_id" })
+  account: AccountEntity;
 
   @ManyToOne(() => TableEntity, (table) => table.reservations, {
     onDelete: "CASCADE",

@@ -1,17 +1,17 @@
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
 dotenv.config();
 
-import { AccountRequest } from "../interfaces/request.interfaces";
+import { RequestWithAccount } from "../interfaces/request.interfaces";
 import { Account } from "../interfaces/account.interfaces";
 
 import { ServerError } from "../models/error";
 
 export const authorizeToken = (
-  request: AccountRequest,
+  request: Request,
   response: Response,
   next: NextFunction
 ) => {
@@ -31,7 +31,7 @@ export const authorizeToken = (
       return next(new ServerError("Invalid Token", StatusCodes.FORBIDDEN));
     }
 
-    request.account = account as Account;
+    (request as RequestWithAccount).account = account as Account;
 
     next();
   });

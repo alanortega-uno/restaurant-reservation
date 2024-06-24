@@ -57,6 +57,7 @@ export const createAccount = async (
     );
   }
 
+  // TODO: consider hashing your password in the Entity
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newAccountEntity = AccountEntity.create({
@@ -160,6 +161,7 @@ export const googleAuth = async (
 
   if (!account) {
     // Create Account
+    // TODO: consider hashing your password in the Entity
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAccountEntity = AccountEntity.create({
