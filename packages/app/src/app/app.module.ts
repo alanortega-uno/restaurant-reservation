@@ -21,6 +21,7 @@ import { AuthenticationEffects } from './state/authentication/authentication.eff
 import { tableReducer } from './state/tables/tables.reducer';
 import { TableEffects } from './state/tables/tables.effects';
 import { TableComponent } from './components/reservation/table/table.component';
+import { FormComponent } from './components/reservation/form/form.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { TableComponent } from './components/reservation/table/table.component';
     ReservationComponent,
     NewAccountComponent,
     TableComponent,
+    FormComponent,
   ],
   imports: [
     BrowserModule,
