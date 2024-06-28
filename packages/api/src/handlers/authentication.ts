@@ -5,7 +5,7 @@ import { AccountEntity } from "../entities/account";
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
-import { Account } from "../interfaces/account.interfaces";
+import { AccountPayload } from "../interfaces/account.interfaces";
 import { generateAccessToken, generateRefreshToken } from "../utils/tokens";
 import { RefreshTokenEntity } from "../entities/refreshToken";
 import { ServerError } from "../utils/server-error";
@@ -67,7 +67,7 @@ export const createAccount = async (
 
   await newAccountEntity.save();
 
-  const newAccount: Account = {
+  const newAccount: AccountPayload = {
     id: newAccountEntity.id,
     email: newAccountEntity.email,
     isAdmin: newAccountEntity.is_admin,
@@ -114,7 +114,7 @@ export const login = async (
     return next(new ServerError("Wrong Password", StatusCodes.UNAUTHORIZED));
   }
 
-  const payload: Account = {
+  const payload: AccountPayload = {
     id: account.id,
     email: account.email,
     isAdmin: account.is_admin,
@@ -171,7 +171,7 @@ export const googleAuth = async (
 
     await newAccountEntity.save();
 
-    const newAccount: Account = {
+    const newAccount: AccountPayload = {
       id: newAccountEntity.id,
       email: newAccountEntity.email,
       isAdmin: newAccountEntity.is_admin,
@@ -189,7 +189,7 @@ export const googleAuth = async (
     return;
   }
 
-  const payload: Account = {
+  const payload: AccountPayload = {
     id: account.id,
     email: account.email,
     isAdmin: account.is_admin,
@@ -247,7 +247,7 @@ export const newToken = async (
         return next(new ServerError("Invalid token", StatusCodes.FORBIDDEN));
       }
 
-      const accessToken = generateAccessToken(account as Account);
+      const accessToken = generateAccessToken(account as AccountPayload);
 
       response.status(StatusCodes.OK).json({
         accessToken,

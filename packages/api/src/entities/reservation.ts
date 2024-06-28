@@ -10,7 +10,8 @@ import {
 } from "typeorm";
 import { AccountEntity } from "./account";
 import { TableEntity } from "./table";
-import { IsString, IsPhoneNumber, IsInt, Min } from "class-validator";
+import { IsString, IsPhoneNumber, IsInt, Min, IsEnum } from "class-validator";
+import { ReservationStatus } from "@restaurant-reservation/shared";
 
 @Entity("reservation")
 export class ReservationEntity extends BaseEntity {
@@ -22,7 +23,7 @@ export class ReservationEntity extends BaseEntity {
   name: string;
 
   @Column()
-  @IsPhoneNumber()
+  @IsPhoneNumber("BO")
   phone: string;
 
   @Column()
@@ -41,6 +42,14 @@ export class ReservationEntity extends BaseEntity {
   })
   @JoinColumn({ name: "table_id" })
   table: TableEntity;
+
+  @Column({
+    type: "enum",
+    enum: ReservationStatus,
+    default: ReservationStatus.active,
+  })
+  @IsEnum(ReservationStatus)
+  status: ReservationStatus;
 
   @CreateDateColumn()
   created_at: Date;

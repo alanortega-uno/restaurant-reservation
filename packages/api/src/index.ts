@@ -23,7 +23,7 @@ import { errorHandler } from "./middleware/error-handler";
 
 const app: Express = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: process.env.ALLOWED_ORIGIN_1 ?? "http://localhost:4200",
     methods: ["GET", "POST"],
@@ -59,24 +59,19 @@ app.use(
 app.use(cors(corsOptions));
 app.use(express.json());
 
+export const AppDataSource = new DataSource({
+  type: (process.env.DB_TYPE as "mariadb" | "mysql") ?? "mariadb",
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT) || 3306,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: [AccountEntity, RefreshTokenEntity, ReservationEntity, TableEntity],
+  synchronize: true,
+});
+
 const main = async () => {
   try {
-    const AppDataSource = new DataSource({
-      type: (process.env.DB_TYPE as "mariadb" | "mysql") ?? "mariadb",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT) || 3306,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [
-        AccountEntity,
-        RefreshTokenEntity,
-        ReservationEntity,
-        TableEntity,
-      ],
-      synchronize: true,
-    });
-
     await AppDataSource.initialize();
 
     console.info("[database]: Data Source has been initialized");

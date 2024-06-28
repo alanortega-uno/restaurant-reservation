@@ -1,6 +1,6 @@
 import { Request } from "express";
-import { Account } from "./account.interfaces";
+import { AccountEntity } from "../entities/account";
 
 export interface RequestWithAccount extends Request {
-  account: Account;
+  account: AccountEntity;
 }

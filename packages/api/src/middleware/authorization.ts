@@ -6,9 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { RequestWithAccount } from "../interfaces/request.interfaces";
-import { Account } from "../interfaces/account.interfaces";
+import { AccountPayload } from "../interfaces/account.interfaces";
 
 import { ServerError } from "../utils/server-error";
+import { AccountEntity } from "../entities/account";
 
 export const authorizeToken = (
   request: Request,
@@ -26,13 +27,27 @@ export const authorizeToken = (
     return next(new ServerError("There is no ACCESS_TOKEN_SECRET"));
   }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, account) => {
-    if (error) {
-      return next(new ServerError("Invalid Token", StatusCodes.FORBIDDEN));
+  jwt.verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET,
+    async (error, accountData) => {
+      if (error) {
+        return next(new ServerError("Invalid Token", StatusCodes.FORBIDDEN));
+      }
+
+      const account = await AccountEntity.findOne({
+        where: { id: (accountData as AccountPayload).id },
+      });
+
+      if (!account) {
+        return next(
+          new ServerError("Account not found", StatusCodes.NOT_FOUND)
+        );
+      }
+
+      (request as RequestWithAccount).account = account;
+
+      next();
     }
-
-    (request as RequestWithAccount).account = account as Account;
-
-    next();
-  });
+  );
 };

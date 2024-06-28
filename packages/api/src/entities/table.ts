@@ -6,6 +6,8 @@ import {
   BaseEntity,
 } from "typeorm";
 import { ReservationEntity } from "./reservation";
+import { TableStatus } from "@restaurant-reservation/shared";
+import { IsEnum } from "class-validator";
 
 @Entity("table")
 export class TableEntity extends BaseEntity {
@@ -21,9 +23,12 @@ export class TableEntity extends BaseEntity {
   capacity: number;
 
   @Column({
-    default: 0,
+    type: "enum",
+    enum: TableStatus,
+    default: TableStatus.available,
   })
-  status: number;
+  @IsEnum(TableStatus)
+  status: TableStatus;
 
   @OneToMany(() => ReservationEntity, (reservation) => reservation.table)
   reservations: ReservationEntity[];

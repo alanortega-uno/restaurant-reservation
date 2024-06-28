@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { RefreshTokenEntity } from "../entities/refreshToken";
-import { Account } from "../interfaces/account.interfaces";
+import { AccountPayload } from "../interfaces/account.interfaces";
 
 export const generateAccessToken = (payload: string | object | Buffer) => {
   if (!process.env.ACCESS_TOKEN_SECRET) {
@@ -11,11 +11,11 @@ export const generateAccessToken = (payload: string | object | Buffer) => {
   }
 
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "30m",
+    expiresIn: "24h",
   });
 };
 
-export const generateRefreshToken = async (account: Account) => {
+export const generateRefreshToken = async (account: AccountPayload) => {
   if (!process.env.REFRESH_TOKEN_SECRET) {
     throw new Error("There is no REFRESH_TOKEN_SECRET");
   }
