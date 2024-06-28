@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { NewAccountComponent } from './components/new-account/new-account.component';
 
@@ -22,6 +22,10 @@ import { tableReducer } from './state/tables/tables.reducer';
 import { TableEffects } from './state/tables/tables.effects';
 import { TableComponent } from './components/reservation/table/table.component';
 import { FormComponent } from './components/reservation/form/form.component';
+
+import { AuthorizationInterceptor } from './interceptors/auth.interceptor';
+import { reservationsReducer } from './state/reservations/reservations.reducer';
+import { ReservationEffects } from './state/reservations/reservations.effects';
 
 @NgModule({
   declarations: [
@@ -41,11 +45,23 @@ import { FormComponent } from './components/reservation/form/form.component';
     StoreModule.forRoot({
       authentication: authenticationReducer,
       tables: tableReducer,
+      reservation: reservationsReducer,
     }),
-    EffectsModule.forRoot([AuthenticationEffects, TableEffects]),
+    EffectsModule.forRoot([
+      AuthenticationEffects,
+      TableEffects,
+      ReservationEffects,
+    ]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
   ],
-  providers: [SocketService],
+  providers: [
+    SocketService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -13,13 +13,46 @@ export class ReservationService {
     private errorHandler: ErrorHandlerService
   ) {}
 
+  getReservation() {
+    return this.http
+      .get(environment.apiBaserURL + '/reservations')
+      .pipe(catchError(this.errorHandler.handleHttpError));
+  }
+
   createReservation(reservation: {
+    tableId: number;
     name: string;
     phone: string;
     numberOfPeople: number;
   }) {
     return this.http
       .post(environment.apiBaserURL + '/reservations', reservation)
+      .pipe(catchError(this.errorHandler.handleHttpError));
+  }
+
+  cancelReservation(reservationId: string | number) {
+    return this.http
+      .patch(environment.apiBaserURL + `/reservations/${reservationId}`, {})
+      .pipe(catchError(this.errorHandler.handleHttpError));
+  }
+
+  updateReservation({
+    reservationId,
+    name,
+    phone,
+    numberOfPeople,
+  }: {
+    reservationId: number;
+    name: string;
+    phone: string;
+    numberOfPeople: number;
+  }) {
+    return this.http
+      .put(environment.apiBaserURL + `/reservations/${reservationId}`, {
+        name,
+        phone,
+        numberOfPeople,
+      })
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 }

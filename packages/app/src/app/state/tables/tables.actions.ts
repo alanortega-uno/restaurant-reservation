@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Table } from '@restaurant-reservation/shared';
+import { TableEntityData } from '@restaurant-reservation/shared';
 
 export const addTable = createAction(
   '[Admin Table] Create table',
@@ -15,7 +15,7 @@ export const loadTables = createAction('[Admin Table] Load tables');
 
 export const loadTablesSuccess = createAction(
   '[Table API] Tables load success',
-  props<{ tables: Table[] }>()
+  props<{ tables: TableEntityData[] }>()
 );
 
 export const loadTablesFailure = createAction(

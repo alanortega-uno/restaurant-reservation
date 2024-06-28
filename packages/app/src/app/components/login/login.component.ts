@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as AuthenticationActions from '../../state/authentication/authentication.actions';
 import {
-  selectApiRequestStatus,
+  selectAuthenticationApiRequestStatus,
   selectTokens,
 } from 'src/app/state/authentication/authentication.selectors';
 import { Observable, Subject, takeUntil } from 'rxjs';
@@ -46,10 +46,19 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.apiRequestStatus$ = this.store.select(selectApiRequestStatus);
+    this.apiRequestStatus$ = this.store.select(
+      selectAuthenticationApiRequestStatus
+    );
   }
 
   ngOnInit(): void {
+    if (
+      sessionStorage.getItem('accessToken') &&
+      sessionStorage.getItem('refreshToken')
+    ) {
+      this.router.navigate(['reservation']);
+    }
+
     this.store.dispatch(AuthenticationActions.clearError());
 
     this.gCredentials = sessionStorage.getItem('gCredentials');

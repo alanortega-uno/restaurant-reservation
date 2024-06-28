@@ -13,14 +13,9 @@ export class TableService {
     private errorHandler: ErrorHandlerService
   ) {}
 
-  getAllTables(accessToken: string) {
+  getAllTables() {
     return this.http
-      .get(environment.apiBaserURL + '/tables', {
-        headers: new HttpHeaders().set(
-          'Authorization',
-          `Bearer ${accessToken}`
-        ),
-      })
+      .get(environment.apiBaserURL + '/tables')
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 }

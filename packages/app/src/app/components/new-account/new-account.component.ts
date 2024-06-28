@@ -7,7 +7,7 @@ import { ValidationService } from 'src/app/services/validation.service';
 import * as AuthenticationActions from '../../state/authentication/authentication.actions';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import {
-  selectApiRequestStatus,
+  selectAuthenticationApiRequestStatus,
   selectTokens,
 } from 'src/app/state/authentication/authentication.selectors';
 
@@ -57,7 +57,9 @@ export class NewAccountComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.apiRequestStatus$ = this.store.select(selectApiRequestStatus);
+    this.apiRequestStatus$ = this.store.select(
+      selectAuthenticationApiRequestStatus
+    );
   }
 
   ngOnInit(): void {

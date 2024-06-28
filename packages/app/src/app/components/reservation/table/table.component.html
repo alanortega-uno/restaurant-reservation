@@ -1,1 +1,13 @@
-<p>table</p>
+<button
+  class="btn w-100"
+  style="height: 15em"
+  [ngClass]="{
+    'btn-secondary': data.status === tableStatus.available,
+    'btn-warning': data.status === tableStatus.reserved,
+    'btn-danger': data.status === tableStatus.occupied
+  }"
+  (click)="onOpenForm()"
+  [disabled]="data.status !== tableStatus.available"
+>
+  {{ data.name }}
+</button>

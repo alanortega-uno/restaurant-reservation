@@ -11,7 +11,7 @@ export interface AuthenticationState {
   status: ApiRequestStatus;
 }
 
-export const initialState: AuthenticationState = {
+export const initialAuthenticationState: AuthenticationState = {
   email: null,
   accessToken: null,
   refreshToken: null,
@@ -20,7 +20,7 @@ export const initialState: AuthenticationState = {
 };
 
 export const authenticationReducer = createReducer(
-  initialState,
+  initialAuthenticationState,
   on(AuthenticationActions.createAccount, (state, { email, password }) => ({
     ...state,
     error: null,

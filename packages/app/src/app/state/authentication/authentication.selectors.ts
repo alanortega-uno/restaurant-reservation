@@ -12,10 +12,15 @@ export const selectTokens = createSelector(
   })
 );
 
-export const selectApiRequestStatus = createSelector(
+export const selectAuthenticationApiRequestStatus = createSelector(
   selectAuthenticationState,
   (state: AuthenticationState) => ({
     status: state.status,
     error: state.error,
   })
+);
+
+export const selectAccountEmail = createSelector(
+  selectAuthenticationState,
+  (state: AuthenticationState) => state.email
 );

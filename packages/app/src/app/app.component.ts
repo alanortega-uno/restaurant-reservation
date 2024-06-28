@@ -10,13 +10,9 @@ export class AppComponent {
   title = 'restaurant-reservation';
   constructor(private socketService: SocketService) {}
 
-  ngOnInit() {
-    this.socketService.listen('message').subscribe((data: any) => {
-      console.log(data);
-    });
-  }
+  ngOnInit() {}
 
-  sendMessage() {
-    this.socketService.emit('message', 'Hello from Angular');
-  }
+  // sendMessage() {
+  //   this.socketService.emit('message', 'Hello from Angular');
+  // }
 }
