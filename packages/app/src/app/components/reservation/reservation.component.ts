@@ -1,19 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  Observable,
-  Subject,
-  combineLatest,
-  filter,
-  first,
-  map,
-  of,
-  switchMap,
-  take,
-  takeLast,
-  takeUntil,
-  withLatestFrom,
-} from 'rxjs';
+import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
 import { loadTables } from 'src/app/state/tables/tables.actions';
 import {
   selectAllTables,
@@ -43,7 +30,6 @@ export class ReservationComponent implements OnInit {
   reservation$: Observable<Reservation | null>;
 
   apiTableRequestStatus$: Observable<{ status: ApiRequestStatus; error: any }>;
-  // activeReservation$: Observable<Reservation | null>;
   apiRequestStatus = ApiRequestStatus;
   tableStatus = TableStatus;
 

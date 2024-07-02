@@ -94,12 +94,23 @@
   </form>
 </div>
 <div class="modal-footer d-flex justify-content-between">
-  <button class="btn btn-light" (click)="cancelReservation()">Cancel</button
+  <button
+    class="btn btn-light"
+    (click)="cancelReservation()"
+    [disabled]="isLoading"
+  >
+    Cancel</button
   ><button
     class="btn btn-primary"
-    [disabled]="!reservationForm.valid || blocked"
+    [disabled]="!reservationForm.valid || blocked || isLoading"
     (click)="activeReservation ? updateReservation() : createReservation()"
   >
+    <span
+      class="spinner-grow spinner-grow-sm"
+      role="status"
+      aria-hidden="true"
+      *ngIf="isLoading"
+    ></span>
     {{ activeReservation ? "Update" : "Create" }}
   </button>
 </div>

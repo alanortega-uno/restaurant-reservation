@@ -8,6 +8,7 @@ import {
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import {
+  ApiRequestStatus,
   Reservation,
   SocketEvents,
   TableEntityData,
@@ -21,7 +22,10 @@ import {
   makeReservation,
   updateReservation,
 } from 'src/app/state/reservations/reservations.actions';
-import { selectReservation } from 'src/app/state/reservations/reservations.selectors';
+import {
+  selectReservation,
+  selectReservationApiRequestStatus,
+} from 'src/app/state/reservations/reservations.selectors';
 import { selectAllTables } from 'src/app/state/tables/tables.selectors';
 
 @Component({
@@ -44,7 +48,10 @@ export class ReservationFormComponent implements OnInit {
   reservation$: Observable<Reservation | null>;
   tables$: Observable<TableEntityData[]>;
 
-  sendingApiRequest = false;
+  reservationApiRequestStatus$!: Observable<ApiRequestStatus>;
+  isLoading = false;
+
+  // if your table has been just taken/reserved
   blocked = false;
 
   private readonly destroy$ = new Subject<void>();
@@ -62,6 +69,16 @@ export class ReservationFormComponent implements OnInit {
         // console.log('activeReservation', activeReservation);
         if (activeReservation) this.activeReservation = activeReservation;
         else this.activeModal.close();
+      });
+
+    this.reservationApiRequestStatus$ = this.store.select(
+      selectReservationApiRequestStatus
+    );
+    this.reservationApiRequestStatus$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((status) => {
+        if (status === ApiRequestStatus.loading) this.isLoading = true;
+        else this.isLoading = false;
       });
 
     this.tables$ = this.store.select(selectAllTables);

@@ -112,15 +112,27 @@
   </ng-container>
 </div>
 <div class="modal-footer d-flex justify-content-between">
-  <button class="btn btn-light" (click)="activeModal.close()">Close</button
+  <button
+    class="btn btn-light"
+    (click)="activeModal.close()"
+    [disabled]="isLoading"
+  >
+    Close</button
   ><button
     class="btn btn-primary"
     (click)="updateTableStatus()"
     [disabled]="
-      tableStatusForm.get('status')?.value == tableStatus.reserved &&
-      !reservationForm.valid
+      (tableStatusForm.get('status')?.value == tableStatus.reserved &&
+        !reservationForm.valid) ||
+      isLoading
     "
   >
+    <span
+      class="spinner-grow spinner-grow-sm"
+      role="status"
+      aria-hidden="true"
+      *ngIf="isLoading"
+    ></span>
     Update
   </button>
 </div>

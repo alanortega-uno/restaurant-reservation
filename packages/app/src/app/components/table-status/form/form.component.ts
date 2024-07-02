@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import {
+  ApiRequestStatus,
   Reservation,
   TableEntityData,
   TableStatus,
@@ -13,14 +14,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { selectAllTables } from 'src/app/state/tables/tables.selectors';
 import { TableStatusService } from 'src/app/services/table-status.service';
-import { selectReservation } from 'src/app/state/reservations/reservations.selectors';
 import {
-  loadReservation,
-  loadReservationByTable,
-} from 'src/app/state/reservations/reservations.actions';
-import { SocketService } from 'src/app/services/socket.service';
+  selectReservation,
+  selectReservationApiRequestStatus,
+} from 'src/app/state/reservations/reservations.selectors';
+import { loadReservationByTable } from 'src/app/state/reservations/reservations.actions';
 
 @Component({
   selector: 'app-form',
@@ -40,7 +39,6 @@ export class TableStatusFormComponent implements OnInit {
 
   activeReservation: Reservation | null = null;
 
-  // tables$: Observable<TableEntityData[]>;
   reservation$: Observable<Reservation | null>;
 
   @Input() table!: TableEntityData;
@@ -48,17 +46,16 @@ export class TableStatusFormComponent implements OnInit {
   tableStatus = TableStatus;
   tableStatusKeyValue = this.enumToArray(TableStatus);
 
+  isLoading = false;
+
   private readonly destroy$ = new Subject<void>();
 
   constructor(
     public activeModal: NgbActiveModal,
     public formBuilder: FormBuilder,
     private store: Store,
-    private tableStatusService: TableStatusService,
-    private socketService: SocketService
+    private tableStatusService: TableStatusService
   ) {
-    // this.tables$ = this.store.select(selectAllTables);
-
     this.reservation$ = this.store.select(selectReservation);
     this.reservation$
       .pipe(takeUntil(this.destroy$))
@@ -122,6 +119,7 @@ export class TableStatusFormComponent implements OnInit {
     };
     console.log(newTable);
 
+    this.isLoading = true;
     const reservationFormValues: {
       name: string;
       phone: string;
@@ -134,7 +132,10 @@ export class TableStatusFormComponent implements OnInit {
 
     this.tableStatusService
       .updateTableStatus(newTable, reservationFormValues)
-      .subscribe((response) => console.log('updateTableStatus', response));
+      .subscribe((response) => {
+        this.isLoading = false;
+        console.log('updateTableStatus', response);
+      });
   }
 
   ngOnDestroy() {

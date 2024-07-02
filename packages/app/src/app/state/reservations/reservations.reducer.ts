@@ -33,13 +33,13 @@ export const reservationsReducer = createReducer(
       ...state,
       activeReservation: activeReservation,
       error: null,
-      status: ApiRequestStatus.loading,
+      status: ApiRequestStatus.success,
     })
   ),
   on(ReservationsActions.loadReservationFailure, (state, { error }) => ({
     ...state,
     error: error,
-    status: ApiRequestStatus.loading,
+    status: ApiRequestStatus.error,
   })),
   on(
     ReservationsActions.makeReservation,
