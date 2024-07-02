@@ -51,3 +51,25 @@ export const authorizeToken = (
     }
   );
 };
+
+export const isAdminAccount = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const account = (request as RequestWithAccount).account;
+
+  if (!account) {
+    return next(
+      new ServerError("There is no account", StatusCodes.UNAUTHORIZED)
+    );
+  }
+
+  if (!account.is_admin) {
+    return next(
+      new ServerError("Account is not admin", StatusCodes.UNAUTHORIZED)
+    );
+  }
+
+  next();
+};

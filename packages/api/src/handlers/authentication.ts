@@ -77,6 +77,8 @@ export const createAccount = async (
   const refreshToken = await generateRefreshToken(newAccount);
 
   response.status(StatusCodes.CREATED).json({
+    email: newAccountEntity.email,
+    isAdmin: newAccountEntity.is_admin,
     accessToken,
     refreshToken,
   });
@@ -100,6 +102,7 @@ export const login = async (
       id: true,
       email: true,
       password: true,
+      is_admin: true,
     },
     where: {
       email,
@@ -125,6 +128,7 @@ export const login = async (
 
   response.json({
     email: account.email,
+    isAdmin: account.is_admin,
     accessToken,
     refreshToken,
   });
@@ -200,6 +204,7 @@ export const googleAuth = async (
 
   response.status(StatusCodes.OK).json({
     email: account.email,
+    isAdmin: account.is_admin,
     accessToken,
     refreshToken,
   });

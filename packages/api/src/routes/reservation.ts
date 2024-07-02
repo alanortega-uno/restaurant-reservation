@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { authorizeToken } from "../middleware/authorization";
+import { authorizeToken, isAdminAccount } from "../middleware/authorization";
 import { catchAsyncErrors, catchSyncErrors } from "../utils/catch-error";
 
 import {
@@ -8,6 +8,7 @@ import {
   cancelReservation,
   getReservation,
   updateReservation,
+  getLatestTableReservation,
 } from "../handlers/reservation";
 
 const router = Router();
@@ -16,6 +17,13 @@ router.get(
   "/",
   catchSyncErrors(authorizeToken),
   catchAsyncErrors(getReservation)
+);
+
+router.get(
+  "/table/:tableId",
+  catchSyncErrors(authorizeToken),
+  catchSyncErrors(isAdminAccount),
+  catchAsyncErrors(getLatestTableReservation)
 );
 
 router.post(

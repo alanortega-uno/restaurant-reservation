@@ -24,7 +24,7 @@ export const getReservation = async (
   response: Response,
   next: NextFunction
 ): Promise<void> => {
-  const reservation = await ReservationService.getLastReservation(
+  const reservation = await ReservationService.getLastReservationByAccount(
     (request as RequestWithAccount).account.id
   );
 
@@ -45,6 +45,34 @@ export const getReservation = async (
       activeReservation.status === ReservationStatus.active
         ? activeReservation
         : null,
+  });
+};
+
+export const getLatestTableReservation = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  const tableId = request.params.tableId;
+  const reservationEntity = await ReservationService.getLastReservationByTable(
+    +tableId
+  );
+
+  const reservation = {
+    id: reservationEntity?.id,
+    name: reservationEntity?.name,
+    numberOfPeople: reservationEntity?.number_of_people,
+    phone: reservationEntity?.phone,
+    status: reservationEntity?.status,
+    createdAt: reservationEntity?.created_at,
+    updatedAt: reservationEntity?.updated_at,
+    table: reservationEntity?.table,
+    account: { ...reservationEntity?.account, password: undefined },
+  };
+
+  response.status(StatusCodes.OK).json({
+    activeReservation:
+      reservation.status === ReservationStatus.active ? reservation : null,
   });
 };
 

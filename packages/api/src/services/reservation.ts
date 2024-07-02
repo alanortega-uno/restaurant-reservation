@@ -35,6 +35,36 @@ export class ReservationService {
     );
   }
 
+  static async fulfillReservation(reservationId: number): Promise<void> {
+    return await AppDataSource.transaction(
+      async (transactionalEntityManager) => {
+        const reservation = await transactionalEntityManager.findOne(
+          ReservationEntity,
+          {
+            where: { id: reservationId },
+            relations: ["table"], // Make sure to load the related table
+          }
+        );
+
+        if (!reservation) {
+          throw new Error("Reservation not found");
+        }
+
+        reservation.status = ReservationStatus.fulfilled;
+        await transactionalEntityManager.save(reservation);
+
+        const table = reservation.table;
+
+        if (!table) {
+          throw new Error("Table not found");
+        }
+
+        table.status = TableStatus.occupied;
+        await transactionalEntityManager.save(table);
+      }
+    );
+  }
+
   static async cancelReservation(
     reservationId: number
   ): Promise<ReservationEntity> {
@@ -67,13 +97,27 @@ export class ReservationService {
     );
   }
 
-  static async getLastReservation(
+  static async getLastReservationByAccount(
     accountId: number
   ): Promise<ReservationEntity | null> {
     const reservationRepository =
       AppDataSource.getRepository(ReservationEntity);
     const lastReservation = await reservationRepository.findOne({
       where: { account: { id: accountId } },
+      order: { created_at: "DESC" },
+      relations: ["table", "account"],
+    });
+
+    return lastReservation;
+  }
+
+  static async getLastReservationByTable(
+    tableId: number
+  ): Promise<ReservationEntity | null> {
+    const reservationRepository =
+      AppDataSource.getRepository(ReservationEntity);
+    const lastReservation = await reservationRepository.findOne({
+      where: { table: { id: tableId } },
       order: { created_at: "DESC" },
       relations: ["table", "account"],
     });

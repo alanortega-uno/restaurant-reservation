@@ -4,6 +4,8 @@ import {
   Column,
   OneToMany,
   BaseEntity,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { ReservationEntity } from "./reservation";
 import { TableStatus } from "@restaurant-reservation/shared";
@@ -32,4 +34,10 @@ export class TableEntity extends BaseEntity {
 
   @OneToMany(() => ReservationEntity, (reservation) => reservation.table)
   reservations: ReservationEntity[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
