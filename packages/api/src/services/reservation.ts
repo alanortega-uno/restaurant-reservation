@@ -1,7 +1,7 @@
 import { AppDataSource } from "../index";
 import { ReservationEntity } from "../entities/reservation";
 import { TableEntity } from "../entities/table";
-import { ReservationStatus, TableStatus } from "@restaurant-reservation/shared";
+import { ReservationStatus, TableStatus } from "../../../shared/index";
 import { ServerError } from "../utils/server-error";
 import { StatusCodes } from "http-status-codes";
 

@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { ReservationEntity } from "./reservation";
-import { TableStatus } from "@restaurant-reservation/shared";
+import { TableStatus } from "../../../shared/index";
 import { IsEnum } from "class-validator";
 
 @Entity("table")

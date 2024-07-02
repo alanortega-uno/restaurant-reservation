@@ -1,4 +1,4 @@
-import { ApiError } from "@restaurant-reservation/shared";
+import { ApiError } from "../../../shared/index";
 
 export class ServerError implements ApiError {
   message: string;

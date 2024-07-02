@@ -5,17 +5,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { TableEntity } from "../entities/table";
-import { ReservationEntity } from "../entities/reservation";
 import { RequestWithAccount } from "../interfaces/request.interfaces";
 import { ServerError } from "../utils/server-error";
 import { validate } from "class-validator";
 
 import { ReservationService } from "../services/reservation";
-import {
-  Reservation,
-  ReservationStatus,
-  SocketEvents,
-} from "@restaurant-reservation/shared";
+import { ReservationStatus, SocketEvents } from "../../../shared/index";
 
 import { io } from "../index";
 

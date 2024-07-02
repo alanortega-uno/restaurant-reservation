@@ -10,16 +10,12 @@ import {
   ReservationStatus,
   TableEntityData,
   TableStatus,
-} from "@restaurant-reservation/shared";
-import { SocketEvents } from "@restaurant-reservation/shared";
+  SocketEvents,
+} from "../../../shared/index";
 
 import { io } from "../index";
 import { ReservationService } from "../services/reservation";
-import { ReservationEntityData } from "@restaurant-reservation/shared/interfaces/reservation";
-import {
-  makeReservation,
-  updateReservation,
-} from "../../../app/src/app/state/reservations/reservations.actions";
+
 import { RequestWithAccount } from "../interfaces/request.interfaces";
 
 export const updateTableStatus = async (

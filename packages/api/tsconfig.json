@@ -26,8 +26,11 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"resolveJsonModule": true,
+		"paths": {
+			"@restaurant-reservation/shared": ["../shared"]
+		}
 		// "baseUrl": "."
 	},
 	"exclude": ["node_modules"],
-	"include": ["./src/**/*.tsx", "./src/**/*.ts", "src/entities/account.ts"],
+	"include": ["./src/**/*.tsx", "./src/**/*.ts", "src/entities/account.ts", "../app/*"],
 }

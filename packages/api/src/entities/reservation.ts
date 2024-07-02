@@ -11,7 +11,7 @@ import {
 import { AccountEntity } from "./account";
 import { TableEntity } from "./table";
 import { IsString, IsPhoneNumber, IsInt, Min, IsEnum } from "class-validator";
-import { ReservationStatus } from "@restaurant-reservation/shared";
+import { ReservationStatus } from "../../../shared/index";
 
 @Entity("reservation")
 export class ReservationEntity extends BaseEntity {
