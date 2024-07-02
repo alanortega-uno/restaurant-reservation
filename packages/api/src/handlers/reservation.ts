@@ -115,7 +115,7 @@ export const createReservation = async (
 
   await newReservation.save();
 
-  io.emit(SocketEvents.updateTables);
+  io.emit(SocketEvents.updateTables, { tableId });
   response.status(StatusCodes.CREATED).json({
     message: "Reservation created",
     reservation: newReservation,
@@ -135,9 +135,13 @@ export const cancelReservation = async (
       .json({ message: "Invalid reservation ID" });
   }
 
-  await ReservationService.cancelReservation(reservationId);
+  const cancelledReservation = await ReservationService.cancelReservation(
+    reservationId
+  );
 
-  io.emit(SocketEvents.updateTables);
+  io.emit(SocketEvents.updateTables, {
+    tableId: cancelledReservation.table.id,
+  });
   response.status(StatusCodes.OK).json({
     message: "Reservation cancelled",
   });

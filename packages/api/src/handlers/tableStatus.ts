@@ -88,7 +88,7 @@ const tableStatusToOccupied = async (
     response.status(StatusCodes.OK).json({
       table: tableEntity,
     });
-    io.emit(SocketEvents.updateTables);
+    io.emit(SocketEvents.updateTables, { tableId: tableEntity.id });
   }
 };
 
@@ -121,7 +121,7 @@ const tableStatusToAvailable = async (
     response.status(StatusCodes.OK).json({
       table: tableEntity,
     });
-    io.emit(SocketEvents.updateTables);
+    io.emit(SocketEvents.updateTables, { tableId: tableEntity.id });
   }
 };
 
@@ -150,7 +150,6 @@ const tableStatusToReserved = async (
       reservationForm.phone,
       reservationForm.numberOfPeople
     );
-    io.emit(SocketEvents.updateReservation, { reservationId: reservation.id });
   } else {
     // create
     await ReservationService.createReservation({
@@ -160,8 +159,12 @@ const tableStatusToReserved = async (
       account: (request as RequestWithAccount).account,
       table: tableEntity,
     });
-    io.emit(SocketEvents.updateTablesAndReservation);
   }
+
+  io.emit(SocketEvents.updateTables, {
+    TableEntityData: tableEntity.id,
+  });
+
   response.status(StatusCodes.OK).json({
     message: "OK",
   });
