@@ -3,8 +3,6 @@ import { TableService } from 'src/app/services/table.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as TablesActions from './tables.actions';
 import { catchError, map, mergeMap, of, withLatestFrom } from 'rxjs';
-import { ReservationService } from 'src/app/services/reservation.service';
-import { Reservation } from '@restaurant-reservation/shared';
 
 @Injectable()
 export class TableEffects {

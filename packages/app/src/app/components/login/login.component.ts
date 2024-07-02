@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as AuthenticationActions from '../../state/authentication/authentication.actions';
 import {
+  selectAccount,
   selectAuthenticationApiRequestStatus,
   selectTokens,
 } from 'src/app/state/authentication/authentication.selectors';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   gCredentials!: string | null;
 
-  tokens$: Observable<{
+  // tokens$: Observable<{
+  //   accessToken: string | null;
+  //   refreshToken: string | null;
+  // }>;
+
+  account$: Observable<{
+    email: string | null;
+    isAdmin: boolean;
     accessToken: string | null;
     refreshToken: string | null;
   }>;
@@ -36,13 +44,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store
   ) {
-    this.tokens$ = this.store.select(selectTokens);
+    // this.tokens$ = this.store.select(selectTokens);
+    // this.tokens$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(({ accessToken, refreshToken }) => {
+    //     if (accessToken && refreshToken) {
+    //       this.router.navigate(['reservation']);
+    //     }
+    //   });
 
-    this.tokens$
+    this.account$ = this.store.select(selectAccount);
+    this.account$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ accessToken, refreshToken }) => {
+      .subscribe(({ email, isAdmin, accessToken, refreshToken }) => {
+        console.log({ email, isAdmin, accessToken, refreshToken });
         if (accessToken && refreshToken) {
-          this.router.navigate(['reservation']);
+          if (isAdmin) {
+            this.router.navigate(['table-status']);
+          } else {
+            this.router.navigate(['reservation']);
+          }
         }
       });
 
@@ -62,7 +83,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.store.dispatch(AuthenticationActions.clearError());
 
     this.gCredentials = sessionStorage.getItem('gCredentials');
-
     sessionStorage.removeItem('gCredentials');
 
     if (this.gCredentials) {

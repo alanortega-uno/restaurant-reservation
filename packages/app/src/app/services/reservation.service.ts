@@ -19,6 +19,12 @@ export class ReservationService {
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 
+  getReservationByTable(tableId: string) {
+    return this.http
+      .get(environment.apiBaserURL + `/reservations/table/${tableId}`)
+      .pipe(catchError(this.errorHandler.handleHttpError));
+  }
+
   createReservation(reservation: {
     tableId: number;
     name: string;

@@ -28,6 +28,7 @@ export class AuthenticationEffects {
 
               return AuthenticationActions.loginSuccess({
                 email: response.email,
+                isAdmin: response.isAdmin,
                 accessToken: response.accessToken,
                 refreshToken: response.refreshToken,
               });
@@ -57,6 +58,7 @@ export class AuthenticationEffects {
 
               return AuthenticationActions.loginSuccess({
                 email: response.email,
+                isAdmin: response.isAdmin,
                 accessToken: response.accessToken,
                 refreshToken: response.refreshToken,
               });
@@ -83,6 +85,7 @@ export class AuthenticationEffects {
 
             return AuthenticationActions.loginSuccess({
               email: response.email,
+              isAdmin: response.isAdmin,
               accessToken: response.accessToken,
               refreshToken: response.refreshToken,
             });

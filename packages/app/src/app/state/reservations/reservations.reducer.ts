@@ -22,6 +22,11 @@ export const reservationsReducer = createReducer(
     error: null,
     status: ApiRequestStatus.loading,
   })),
+  on(ReservationsActions.loadReservationByTable, (state, { tableId }) => ({
+    activeReservation: null,
+    error: null,
+    status: ApiRequestStatus.loading,
+  })),
   on(
     ReservationsActions.loadReservationSuccess,
     (state, { activeReservation }) => ({

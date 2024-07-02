@@ -17,7 +17,12 @@ export const loginWithGoogle = createAction(
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ email: string; accessToken: string; refreshToken: string }>()
+  props<{
+    email: string;
+    isAdmin: boolean;
+    accessToken: string;
+    refreshToken: string;
+  }>()
 );
 
 export const loginFailure = createAction(

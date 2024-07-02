@@ -5,6 +5,7 @@ import { ApiRequestStatus } from '@restaurant-reservation/shared';
 
 export interface AuthenticationState {
   email: string | null;
+  isAdmin: boolean;
   accessToken: string | null;
   refreshToken: string | null;
   error: any | null;
@@ -15,6 +16,7 @@ export const initialAuthenticationState: AuthenticationState = {
   email: null,
   accessToken: null,
   refreshToken: null,
+  isAdmin: false,
   error: null,
   status: ApiRequestStatus.pending,
 };
@@ -38,9 +40,10 @@ export const authenticationReducer = createReducer(
   })),
   on(
     AuthenticationActions.loginSuccess,
-    (state, { email, accessToken, refreshToken }) => ({
+    (state, { email, isAdmin, accessToken, refreshToken }) => ({
       ...state,
       email,
+      isAdmin,
       accessToken,
       refreshToken,
       error: null,

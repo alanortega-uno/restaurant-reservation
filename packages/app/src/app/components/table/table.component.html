@@ -7,7 +7,7 @@
     'btn-danger': data.status === tableStatus.occupied
   }"
   (click)="onOpenForm()"
-  [disabled]="data.status !== tableStatus.available"
+  [disabled]="disabled"
 >
   {{ data.name }}
 </button>

@@ -20,7 +20,12 @@ export const selectAuthenticationApiRequestStatus = createSelector(
   })
 );
 
-export const selectAccountEmail = createSelector(
+export const selectAccount = createSelector(
   selectAuthenticationState,
-  (state: AuthenticationState) => state.email
+  (state: AuthenticationState) => ({
+    email: state.email,
+    isAdmin: state.isAdmin,
+    accessToken: state.accessToken,
+    refreshToken: state.refreshToken,
+  })
 );

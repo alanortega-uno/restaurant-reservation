@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { TableEntityData } from '@restaurant-reservation/shared';
+import { Reservation, TableEntityData } from '@restaurant-reservation/shared';
 
 export const addTable = createAction(
   '[Admin Table] Create table',

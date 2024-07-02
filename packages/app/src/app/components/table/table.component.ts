@@ -9,6 +9,7 @@ import { TableStatus } from '@restaurant-reservation/shared';
 })
 export class TableComponent implements OnInit {
   @Input() data!: TableEntityData;
+  @Input() disabled = false;
 
   tableStatus = TableStatus;
 

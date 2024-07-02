@@ -5,6 +5,11 @@ export const loadReservation = createAction(
   '[Reservation API] Load active reservation'
 );
 
+export const loadReservationByTable = createAction(
+  '[Reservation API] Load active reservation',
+  props<{ tableId: string }>()
+);
+
 export const loadReservationSuccess = createAction(
   '[Reservation API] Load active reservation success',
   props<{ activeReservation: Reservation | null }>()

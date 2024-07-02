@@ -24,14 +24,14 @@ import {
   Reservation,
   SocketEvents,
   TableEntityData,
+  TableStatus,
 } from '@restaurant-reservation/shared';
 import { Router } from '@angular/router';
-import { FormComponent } from './form/form.component';
+import { ReservationFormComponent } from './form/form.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { loadReservation } from 'src/app/state/reservations/reservations.actions';
 import { selectReservation } from 'src/app/state/reservations/reservations.selectors';
 import { SocketService } from 'src/app/services/socket.service';
-import { selectAccountEmail } from 'src/app/state/authentication/authentication.selectors';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -45,6 +45,7 @@ export class ReservationComponent implements OnInit {
   apiTableRequestStatus$: Observable<{ status: ApiRequestStatus; error: any }>;
   // activeReservation$: Observable<Reservation | null>;
   apiRequestStatus = ApiRequestStatus;
+  tableStatus = TableStatus;
 
   vm$: Observable<{
     apiRequestStatus: { status: ApiRequestStatus; error: any };
@@ -72,14 +73,21 @@ export class ReservationComponent implements OnInit {
           reservation &&
           reservation.table &&
           !this.modalService.hasOpenModals()
-        )
+        ) {
           this.openForm(reservation.table, reservation);
+        }
       });
 
     this.socketService.listen(SocketEvents.updateTables).subscribe(() => {
-      console.log('updateTables');
       this.store.dispatch(loadTables());
     });
+
+    this.socketService
+      .listen(SocketEvents.updateTablesAndReservation)
+      .subscribe(() => {
+        this.store.dispatch(loadTables());
+        this.store.dispatch(loadReservation());
+      });
 
     this.vm$ = combineLatest([this.apiTableRequestStatus$, this.tables$]).pipe(
       map(([apiRequestStatus, tables]) => ({ apiRequestStatus, tables }))
@@ -102,7 +110,7 @@ export class ReservationComponent implements OnInit {
   }
 
   openForm(table: TableEntityData, activeReservation?: Reservation) {
-    const modalRef = this.modalService.open(FormComponent, {
+    const modalRef = this.modalService.open(ReservationFormComponent, {
       backdrop: 'static',
       keyboard: false,
     });

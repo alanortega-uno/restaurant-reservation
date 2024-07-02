@@ -9,12 +9,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import {
   Reservation,
+  SocketEvents,
   TableEntityData,
   TableStatus,
 } from '@restaurant-reservation/shared';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { SocketService } from 'src/app/services/socket.service';
 import {
   cancelReservation,
+  loadReservation,
   makeReservation,
   updateReservation,
 } from 'src/app/state/reservations/reservations.actions';
@@ -26,7 +29,7 @@ import { selectAllTables } from 'src/app/state/tables/tables.selectors';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class ReservationFormComponent implements OnInit {
   @Input() table!: TableEntityData;
   @Input() activeReservation!: Reservation;
 
@@ -49,13 +52,16 @@ export class FormComponent implements OnInit {
   constructor(
     public activeModal: NgbActiveModal,
     public formBuilder: FormBuilder,
-    private store: Store
+    private store: Store,
+    private socketService: SocketService
   ) {
     this.reservation$ = this.store.select(selectReservation);
     this.reservation$
       .pipe(takeUntil(this.destroy$))
       .subscribe((activeReservation) => {
+        // console.log('activeReservation', activeReservation);
         if (activeReservation) this.activeReservation = activeReservation;
+        else this.activeModal.close();
       });
 
     this.tables$ = this.store.select(selectAllTables);
@@ -71,6 +77,17 @@ export class FormComponent implements OnInit {
         this.blocked = true;
       }
     });
+
+    this.socketService
+      .listen(SocketEvents.updateReservation)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: any) => {
+        const reservationId = data?.reservationId;
+
+        if (reservationId === this.activeReservation.id) {
+          this.store.dispatch(loadReservation());
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -82,7 +99,7 @@ export class FormComponent implements OnInit {
         [Validators.required, Validators.pattern('\\d{8}')],
       ],
       numberOfPeople: [
-        this.activeReservation?.number_of_people ?? 2,
+        (this.activeReservation as any)?.numberOfPeople ?? 2,
         [
           Validators.required,
           Validators.min(1),

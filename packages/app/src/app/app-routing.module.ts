@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { NewAccountComponent } from './components/new-account/new-account.component';
+import { TableStatusComponent } from './components/table-status/table-status.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'reservation', component: ReservationComponent },
   { path: 'new-account', component: NewAccountComponent },
+  { path: 'table-status', component: TableStatusComponent },
   { path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 

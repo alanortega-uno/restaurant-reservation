@@ -5,6 +5,7 @@ import * as ReservationsActions from './reservations.actions';
 import { catchError, map, merge, mergeMap, of, withLatestFrom } from 'rxjs';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { Reservation } from '@restaurant-reservation/shared';
+import { props } from '@ngrx/store';
 
 @Injectable()
 export class ReservationEffects {
@@ -20,6 +21,31 @@ export class ReservationEffects {
         this.reservationService.getReservation().pipe(
           map((response: any) => {
             console.log('ReservationsActions.loadReservation', response);
+            if (response.error) {
+              return ReservationsActions.loadReservationFailure({
+                error: response.error,
+              });
+            }
+
+            return ReservationsActions.loadReservationSuccess({
+              activeReservation: response.activeReservation,
+            });
+          }),
+          catchError((error) =>
+            of(ReservationsActions.loadReservationFailure({ error }))
+          )
+        )
+      )
+    )
+  );
+
+  loadReservationByTable$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ReservationsActions.loadReservationByTable),
+      mergeMap((props) =>
+        this.reservationService.getReservationByTable(props.tableId).pipe(
+          map((response: any) => {
+            console.log('ReservationsActions.loadReservationByTable', response);
             if (response.error) {
               return ReservationsActions.loadReservationFailure({
                 error: response.error,

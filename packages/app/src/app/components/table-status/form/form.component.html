@@ -1,0 +1,126 @@
+<div class="modal-header">
+  <h4>Table</h4>
+</div>
+<div class="modal-content">
+  <form [formGroup]="tableStatusForm" class="p-4" autocomplete="off">
+    <legend class="text-center">{{ table.name }}</legend>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" class="form-select" formControlName="status">
+        <option
+          *ngFor="let status of tableStatusKeyValue"
+          [value]="status.value"
+        >
+          {{ status.key }}
+        </option>
+      </select>
+    </div>
+  </form>
+  <ng-container
+    *ngIf="tableStatusForm.get('status')?.value == tableStatus.reserved"
+  >
+    <form [formGroup]="reservationForm" class="p-4" autocomplete="off">
+      <legend class="text-center">Reservation</legend>
+
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input
+          id="name"
+          class="form-control"
+          type="text"
+          formControlName="name"
+          autocomplete="false"
+        />
+        <div
+          *ngIf="
+            reservationForm.get('name')?.invalid &&
+            (reservationForm.get('name')?.dirty ||
+              reservationForm.get('name')?.touched)
+          "
+          class="text-danger"
+        >
+          <div *ngIf="reservationForm.get('name')?.errors?.['required']">
+            Name is required
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+
+        <input
+          id="phone"
+          class="form-control"
+          type="text"
+          formControlName="phone"
+        />
+
+        <div
+          *ngIf="
+            reservationForm.get('phone')?.invalid &&
+            (reservationForm.get('phone')?.dirty ||
+              reservationForm.get('phone')?.touched)
+          "
+          class="text-danger"
+        >
+          <div *ngIf="reservationForm.get('phone')?.errors?.['required']">
+            Phone is required
+          </div>
+          <div *ngIf="reservationForm.get('phone')?.errors?.['pattern']">
+            Phone is invalid
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="number-of-people" class="form-label"
+          >Number of people</label
+        >
+
+        <input
+          id="number-of-people"
+          class="form-control"
+          type="number"
+          min="1"
+          [max]="table.capacity"
+          formControlName="numberOfPeople"
+        />
+
+        <div
+          *ngIf="
+            reservationForm.get('numberOfPeople')?.invalid &&
+            (reservationForm.get('numberOfPeople')?.dirty ||
+              reservationForm.get('numberOfPeople')?.touched)
+          "
+          class="text-danger"
+        >
+          <div
+            *ngIf="reservationForm.get('numberOfPeople')?.errors?.['required']"
+          >
+            Invalid number of people
+          </div>
+          <div *ngIf="reservationForm.get('numberOfPeople')?.errors?.['min']">
+            It should be grater than 0
+          </div>
+          <div *ngIf="reservationForm.get('numberOfPeople')?.errors?.['max']">
+            Exceeds table capacity
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</div>
+<div class="modal-footer d-flex justify-content-between">
+  <button class="btn btn-light" (click)="activeModal.close()">Close</button
+  ><button
+    class="btn btn-primary"
+    (click)="updateTableStatus()"
+    [disabled]="
+      tableStatusForm.get('status')?.value == tableStatus.reserved &&
+      !reservationForm.valid
+    "
+  >
+    Update
+  </button>
+</div>
