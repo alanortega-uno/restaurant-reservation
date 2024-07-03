@@ -58,5 +58,6 @@ export const authenticationReducer = createReducer(
   on(AuthenticationActions.clearError, (state) => ({
     ...state,
     error: null,
-  }))
+  })),
+  on(AuthenticationActions.clearAccount, (state) => initialAuthenticationState)
 );

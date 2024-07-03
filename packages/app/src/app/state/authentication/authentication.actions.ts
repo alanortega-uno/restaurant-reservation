@@ -31,3 +31,5 @@ export const loginFailure = createAction(
 );
 
 export const clearError = createAction('[Auth] Clear error');
+
+export const clearAccount = createAction('[Auth] Clear account');
