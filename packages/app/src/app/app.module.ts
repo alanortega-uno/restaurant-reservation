@@ -28,6 +28,7 @@ import { reservationsReducer } from './state/reservations/reservations.reducer';
 import { ReservationEffects } from './state/reservations/reservations.effects';
 import { TableStatusComponent } from './components/table-status/table-status.component';
 import { TableStatusFormComponent } from './components/table-status/form/form.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { TableStatusFormComponent } from './components/table-status/form/form.co
     ReservationFormComponent,
     TableStatusComponent,
     TableStatusFormComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

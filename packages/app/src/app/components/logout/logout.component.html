@@ -1,0 +1,33 @@
+<ng-template #confirmModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Logout</h4>
+  </div>
+  <div class="modal-body">Do you wan to sign out?</div>
+  <div class="modal-footer d-flex justify-content-between">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="modal.close(false)"
+    >
+      No
+    </button>
+
+    <button type="button" class="btn btn-danger" (click)="modal.close(true)">
+      Yes
+    </button>
+  </div>
+</ng-template>
+
+<div ngbDropdown class="d-inline-block">
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    id="dropdownBasic1"
+    ngbDropdownToggle
+  >
+    {{ accountEmail }}
+  </button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+    <button ngbDropdownItem (click)="openModal(confirmModal)">Logout</button>
+  </div>
+</div>

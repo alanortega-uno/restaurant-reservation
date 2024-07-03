@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { Observable, Subject, combineLatest, map, take, takeUntil } from 'rxjs';
 import { loadTables } from 'src/app/state/tables/tables.actions';
 import {
   selectAllTables,
@@ -38,6 +38,8 @@ export class ReservationComponent implements OnInit {
     tables: TableEntityData[];
   }>;
 
+  isModalFormOpen = false;
+
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -55,11 +57,7 @@ export class ReservationComponent implements OnInit {
     this.reservation$
       .pipe(takeUntil(this.destroy$))
       .subscribe((reservation) => {
-        if (
-          reservation &&
-          reservation.table &&
-          !this.modalService.hasOpenModals()
-        ) {
+        if (reservation && reservation.table && !this.isModalFormOpen) {
           this.openForm(reservation.table, reservation);
         }
       });
@@ -96,6 +94,7 @@ export class ReservationComponent implements OnInit {
   }
 
   openForm(table: TableEntityData, activeReservation?: Reservation) {
+    this.isModalFormOpen = true;
     const modalRef = this.modalService.open(ReservationFormComponent, {
       backdrop: 'static',
       keyboard: false,
@@ -103,6 +102,10 @@ export class ReservationComponent implements OnInit {
 
     modalRef.componentInstance.table = table;
     modalRef.componentInstance.activeReservation = activeReservation;
+
+    modalRef.closed.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.isModalFormOpen = false;
+    });
   }
 
   ngOnDestroy() {
