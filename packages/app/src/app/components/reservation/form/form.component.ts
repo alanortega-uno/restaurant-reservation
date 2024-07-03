@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import {
   ApiRequestStatus,
@@ -14,7 +14,7 @@ import {
   TableEntityData,
   TableStatus,
 } from '@restaurant-reservation/shared';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { SocketService } from 'src/app/services/socket.service';
 import {
   cancelReservation,
@@ -27,6 +27,9 @@ import {
   selectReservationApiRequestStatus,
 } from 'src/app/state/reservations/reservations.selectors';
 import { selectAllTables } from 'src/app/state/tables/tables.selectors';
+import { ReservationConfirmComponent } from '../confirm/confirm.component';
+import { clearAccount } from 'src/app/state/authentication/authentication.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -58,7 +61,9 @@ export class ReservationFormComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
+    public modalService: NgbModal,
     public formBuilder: FormBuilder,
+    private router: Router,
     private store: Store,
     private socketService: SocketService
   ) {
@@ -135,9 +140,30 @@ export class ReservationFormComponent implements OnInit {
     this.activeModal.close();
   }
 
+  openConfirmModal() {
+    const modalRef = this.modalService.open(ReservationConfirmComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+    });
+
+    modalRef.componentInstance.table = this.table;
+    modalRef.componentInstance.reservationFormValues =
+      this.reservationForm.value;
+
+    modalRef.closed.pipe(takeUntil(this.destroy$)).subscribe((yes: boolean) => {
+      if (yes && !this.blocked) {
+        this.activeReservation
+          ? this.updateReservation()
+          : this.createReservation();
+      }
+    });
+  }
+
   createReservation() {
     const { name, phone, numberOfPeople } = this.reservationForm.value;
 
+    // this.openConfirmModal();
     this.store.dispatch(
       makeReservation({
         tableId: this.table.id,
@@ -146,6 +172,9 @@ export class ReservationFormComponent implements OnInit {
         numberOfPeople: Number(numberOfPeople),
       })
     );
+
+    this.activeModal.close();
+    this.closeSession();
   }
 
   updateReservation() {
@@ -163,6 +192,19 @@ export class ReservationFormComponent implements OnInit {
         numberOfPeople,
       })
     );
+
+    this.activeModal.close();
+    this.closeSession();
+  }
+
+  private closeSession() {
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+
+    this.store.dispatch(clearAccount());
+
+    this.router.navigate(['login']);
   }
 
   ngOnDestroy() {

@@ -62,7 +62,9 @@
     </div>
 
     <div class="mb-3">
-      <label for="number-of-people" class="form-label">Number of people</label>
+      <label for="number-of-people" class="form-label"
+        >Number of people <i>(Max {{ table.capacity }} people)</i></label
+      >
 
       <input
         id="number-of-people"
@@ -106,7 +108,7 @@
   ><button
     class="btn btn-primary"
     [disabled]="!reservationForm.valid || blocked || isLoading"
-    (click)="activeReservation ? updateReservation() : createReservation()"
+    (click)="openConfirmModal()"
   >
     <span
       class="spinner-grow spinner-grow-sm"

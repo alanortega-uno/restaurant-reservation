@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <h4>Reservation</h4>
+</div>
+<div class="modal-content">
+  <table class="table table-success">
+    <tbody>
+      <tr>
+        <th scope="row">Table</th>
+        <td>{{ table.name }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Max. capacity</th>
+        <td>{{ table.capacity }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Reservation name</th>
+        <td>{{ reservationFormValues.name }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Phone</th>
+        <td>{{ reservationFormValues.phone }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Number of people</th>
+        <td>{{ reservationFormValues.numberOfPeople }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer d-flex justify-content-between">
+  <button class="btn btn-outline-secondary" (click)="activeModal.close(false)">
+    I want to modify something
+  </button>
+
+  <button class="btn btn-primary" (click)="activeModal.close(true)">
+    Confirm
+  </button>
+</div>
