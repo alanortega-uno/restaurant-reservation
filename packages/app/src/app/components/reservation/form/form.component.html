@@ -3,7 +3,10 @@
 </div>
 <div class="modal-content">
   <form [formGroup]="reservationForm" class="p-4" autocomplete="off">
-    <legend class="text-center">{{ table.name }}</legend>
+    <legend class="text-center">Table: {{ table.name }}</legend>
+    <legend class="text-center">
+      <i class="bi bi-people-fill"></i> {{ table.capacity }}
+    </legend>
     <legend class="text-center text-danger" *ngIf="blocked">
       Someone just booked it
     </legend>
