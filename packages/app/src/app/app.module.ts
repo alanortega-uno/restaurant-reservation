@@ -7,7 +7,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -30,6 +30,7 @@ import { TableStatusComponent } from './components/table-status/table-status.com
 import { TableStatusFormComponent } from './components/table-status/form/form.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { ReservationConfirmComponent } from './components/reservation/confirm/confirm.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -43,11 +44,13 @@ import { ReservationConfirmComponent } from './components/reservation/confirm/co
     TableStatusFormComponent,
     LogoutComponent,
     ReservationConfirmComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    NgbNavModule,
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot({

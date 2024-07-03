@@ -7,7 +7,6 @@ import * as AuthenticationActions from '../../state/authentication/authenticatio
 import {
   selectAccount,
   selectAuthenticationApiRequestStatus,
-  selectTokens,
 } from 'src/app/state/authentication/authentication.selectors';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 
@@ -22,12 +21,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   gCredentials!: string | null;
-
-  // tokens$: Observable<{
-  //   accessToken: string | null;
-  //   refreshToken: string | null;
-  // }>;
-
   account$: Observable<{
     email: string | null;
     isAdmin: boolean;
@@ -44,15 +37,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store
   ) {
-    // this.tokens$ = this.store.select(selectTokens);
-    // this.tokens$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(({ accessToken, refreshToken }) => {
-    //     if (accessToken && refreshToken) {
-    //       this.router.navigate(['reservation']);
-    //     }
-    //   });
-
     this.account$ = this.store.select(selectAccount);
     this.account$
       .pipe(takeUntil(this.destroy$))
@@ -60,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log({ email, isAdmin, accessToken, refreshToken });
         if (accessToken && refreshToken) {
           if (isAdmin) {
-            this.router.navigate(['table-status']);
+            this.router.navigate(['admin-dashboard']);
           } else {
             this.router.navigate(['reservation']);
           }
@@ -73,6 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // TODO review logic here, what is it is admin?
     if (
       sessionStorage.getItem('accessToken') &&
       sessionStorage.getItem('refreshToken')

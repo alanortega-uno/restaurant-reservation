@@ -1,0 +1,33 @@
+<!-- <nav
+  class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between"
+>
+  <h4>Admin Dashboard</h4>
+
+  <div>Admin: <app-logout></app-logout></div>
+</nav> -->
+<nav
+  class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between p-0"
+>
+  <ul
+    ngbNav
+    #nav="ngbNav"
+    [(activeId)]="active"
+    class="nav-tabs align-self-baseline"
+  >
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>Tables Status</a>
+      <ng-template ngbNavContent>
+        <app-table-status></app-table-status>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>Statistics</a>
+      <ng-template ngbNavContent>
+        <p>Content of Tab 2</p>
+      </ng-template>
+    </li>
+  </ul>
+  <div>Admin: <app-logout></app-logout></div>
+</nav>
+
+<div [ngbNavOutlet]="nav"></div>
