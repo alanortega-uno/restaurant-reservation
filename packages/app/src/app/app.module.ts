@@ -31,7 +31,9 @@ import { TableStatusFormComponent } from './components/table-status/form/form.co
 import { LogoutComponent } from './components/logout/logout.component';
 import { ReservationConfirmComponent } from './components/reservation/confirm/confirm.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-
+import { StatisticsComponent } from './components/statistics/statistics.component';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { DatepickerRangePopupComponent } from './components/shared/datepicker-range-popup/datepicker-range-popup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +47,8 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     LogoutComponent,
     ReservationConfirmComponent,
     AdminDashboardComponent,
+    StatisticsComponent,
+    DatepickerRangePopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +68,9 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
       ReservationEffects,
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts'),
+    }),
   ],
   providers: [
     SocketService,

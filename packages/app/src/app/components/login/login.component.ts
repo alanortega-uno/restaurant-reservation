@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log({ email, isAdmin, accessToken, refreshToken });
         if (accessToken && refreshToken) {
           if (isAdmin) {
-            this.router.navigate(['admin-dashboard']);
+            this.router.navigate(['table-status']);
           } else {
             this.router.navigate(['reservation']);
           }

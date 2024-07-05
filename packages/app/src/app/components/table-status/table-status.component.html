@@ -1,3 +1,14 @@
+<nav
+  class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between"
+>
+  <div>
+    <button class="btn" [disabled]="true">Table Status</button>
+    <a class="btn ms-2" [routerLink]="['/statistics']">Statistics</a>
+  </div>
+
+  <div>Admin: <app-logout></app-logout></div>
+</nav>
+
 <div class="container text-center" *ngIf="vm$ | async as vm">
   <div
     class="row row-cols-4"
