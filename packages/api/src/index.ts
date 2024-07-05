@@ -87,10 +87,6 @@ const main = async () => {
 
     if (process.env.NODE_ENV === "test") return;
 
-    // app.listen(port, () => {
-    //   console.info(`[server]: Server is running at port ${port}`);
-    // });
-
     httpServer.listen(port, () => {
       console.log(`[server]: Server is running at port ${port}`);
     });

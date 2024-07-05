@@ -90,6 +90,7 @@ describe("googleAuth", () => {
     expect(response.status).toBe(StatusCodes.CREATED);
     expect(response.body).toEqual({
       accessToken: "access-token",
+      email: "test@example.com",
       refreshToken: "refresh-token",
     });
   });
@@ -117,6 +118,8 @@ describe("googleAuth", () => {
     expect(response.status).toBe(StatusCodes.OK);
     expect(response.body).toEqual({
       accessToken: "access-token",
+      email: "test@example.com",
+      isAdmin: false,
       refreshToken: "refresh-token",
     });
   });

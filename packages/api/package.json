@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
+    "test:e2e": "jest --config jest.e2e.config.js",
     "build": "npx tsc -p tsconfig.json",
     "start": "node dist/api/src/index.js",
     "dev": "nodemon src/index.ts"

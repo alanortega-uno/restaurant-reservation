@@ -5,4 +5,9 @@ module.exports = {
   verbose: true,
   forceExit: true,
   // clearMocks: true
+  // globals: {
+  //   'ts-jest': {
+  //     tsconfig: 'tsconfig.json',
+  //   },
+  // },
 };

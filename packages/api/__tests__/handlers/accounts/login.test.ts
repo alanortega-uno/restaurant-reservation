@@ -115,6 +115,8 @@ describe("Account Endpoint", () => {
       expect(response.body).toEqual({
         accessToken: "access-token",
         refreshToken: "refresh-token",
+        email: "test@example.com",
+        isAdmin: false,
       });
     });
 
