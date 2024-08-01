@@ -7,6 +7,7 @@ import { of, throwError } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 import { LoginComponent } from './login.component';
+import { Store } from '@ngrx/store';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -26,12 +27,15 @@ describe('LoginComponent', () => {
       navigate: jasmine.createSpy('navigate'),
     };
 
+    const testStore = jasmine.createSpyObj('Store', ['select', 'dispatch']);
+
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [ReactiveFormsModule],
       providers: [
         { provide: AuthenticationService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock },
+        { provide: Store, useValue: testStore },
       ],
     }).compileComponents();
 

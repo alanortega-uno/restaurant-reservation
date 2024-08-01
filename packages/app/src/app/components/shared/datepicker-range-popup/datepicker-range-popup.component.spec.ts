@@ -2,15 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatepickerRangePopupComponent } from './datepicker-range-popup.component';
 
+import {
+  NgbDate,
+  NgbCalendar,
+  NgbDateParserFormatter,
+} from '@ng-bootstrap/ng-bootstrap';
+
 describe('DatepickerRangePopupComponent', () => {
   let component: DatepickerRangePopupComponent;
   let fixture: ComponentFixture<DatepickerRangePopupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DatepickerRangePopupComponent ]
-    })
-    .compileComponents();
+      declarations: [DatepickerRangePopupComponent],
+      imports: [NgbCalendar],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DatepickerRangePopupComponent);
     component = fixture.componentInstance;

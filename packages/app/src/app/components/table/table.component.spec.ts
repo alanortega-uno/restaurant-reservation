@@ -8,12 +8,17 @@ describe('TableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableComponent ]
-    })
-    .compileComponents();
+      declarations: [TableComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TableComponent);
     component = fixture.componentInstance;
+    component.data = {
+      id: 1,
+      name: '1',
+      capacity: 8,
+      status: 0,
+    };
     fixture.detectChanges();
   });
 

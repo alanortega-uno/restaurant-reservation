@@ -1,0 +1,35 @@
+services:
+  mariadb:
+    image: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: Control123
+      MARIADB_DATABASE: restaurant_reservations
+    ports:
+      - 3307:3306
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  api:
+    env_file:
+      - packages/api/.env
+    environment:
+      - DB_HOST=mariadb
+    build: packages/api
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    links:
+      - mariadb
+    ports:
+      - 3000:3000
+  # app:
+  #   build: packages/app
+  #   depends_on:
+  #     - api
+  #   links:
+  #     - api
+  #   ports:
+  #     - 4200:4200

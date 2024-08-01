@@ -1,0 +1,6 @@
+**/node_modules
+**/dist
+**/logs
+**/rest-client
+**/.env
+**/.env.example

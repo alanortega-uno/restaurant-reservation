@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AdminDashboardComponent } from './admin-dashboard.component';
 
@@ -8,9 +9,9 @@ describe('AdminDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminDashboardComponent ]
-    })
-    .compileComponents();
+      declarations: [AdminDashboardComponent],
+      imports: [NgbNavModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AdminDashboardComponent);
     component = fixture.componentInstance;
