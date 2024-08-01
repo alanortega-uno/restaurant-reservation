@@ -10,16 +10,14 @@ dotenv.config();
 
 import { routes } from "./routes";
 
-import { DataSource } from "typeorm";
-import { AccountEntity } from "./entities/account";
-import { RefreshTokenEntity } from "./entities/refreshToken";
-import { ReservationEntity } from "./entities/reservation";
-import { TableEntity } from "./entities/table";
-
 import expressWinston from "express-winston";
 import { logger, internalErrorLogger } from "./logger";
 
 import { errorHandler } from "./middleware/error-handler";
+
+import swaggerDocs from "./utils/swagger";
+
+import AppDataSource from "./db/dataSource";
 
 const app: Express = express();
 const httpServer = createServer(app);
@@ -59,16 +57,7 @@ app.use(
 app.use(cors(corsOptions));
 app.use(express.json());
 
-export const AppDataSource = new DataSource({
-  type: (process.env.DB_TYPE as "mariadb" | "mysql") ?? "mariadb",
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT) || 3306,
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  entities: [AccountEntity, RefreshTokenEntity, ReservationEntity, TableEntity],
-  synchronize: true,
-});
+export { AppDataSource };
 
 const main = async () => {
   try {
@@ -76,14 +65,16 @@ const main = async () => {
 
     console.info("[database]: Data Source has been initialized");
 
-    const port = process.env.PORT || 4000;
+    const port = Number(process.env.PORT) || 4000;
 
     // routes
-    app.use("/", routes);
+    app.use("/api", routes);
 
     app.use(internalErrorLogger);
 
     app.use(errorHandler);
+
+    swaggerDocs(app, port);
 
     if (process.env.NODE_ENV === "test") return;
 

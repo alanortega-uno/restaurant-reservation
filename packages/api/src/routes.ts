@@ -9,6 +9,7 @@ import { statisticsRouter } from "./routes/statistics";
 export const routes = express.Router();
 
 routes.use(defaultRoute);
+
 routes.use("/auth", authRouter);
 routes.use("/tables", tablesRouter);
 routes.use("/reservations", reservationsRouter);

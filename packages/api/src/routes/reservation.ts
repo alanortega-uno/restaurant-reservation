@@ -13,6 +13,35 @@ import {
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/reservations:
+ *  get:
+ *    security:
+ *       - bearerAuth: []
+ *    tags:
+ *      - Reservations
+ *    summary: Get Reservation
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/GoogleAccountInput'
+ *    responses:
+ *      200:
+ *        description: Logged in
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/LoggedInAccountResponse'
+ *
+ *      404:
+ *        description: Email not found
+ *      400:
+ *        description: Bad request
+ *
+ */
 router.get(
   "/",
   catchSyncErrors(authorizeToken),

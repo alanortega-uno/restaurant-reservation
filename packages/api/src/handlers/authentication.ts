@@ -11,22 +11,6 @@ import { RefreshTokenEntity } from "../entities/refreshToken";
 import { ServerError } from "../utils/server-error";
 dotenv.config();
 
-// TODO: Remove
-export const test = (request: Request, response: Response) => {
-  response.json({
-    message: "test",
-  });
-};
-
-// TODO: Remove
-export const getAllAccounts = async (request: Request, response: Response) => {
-  const accounts = await AccountEntity.find();
-
-  response.status(StatusCodes.OK).json({
-    accounts,
-  });
-};
-
 export const createAccount = async (
   request: Request,
   response: Response,
