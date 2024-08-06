@@ -6,7 +6,10 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 
 import dotenv from "dotenv";
-dotenv.config();
+let envFileName = ".env";
+if (process.env.NODE_ENV === "e2e") envFileName = `.env.e2e`;
+
+dotenv.config({ path: envFileName });
 
 import { routes } from "./routes";
 

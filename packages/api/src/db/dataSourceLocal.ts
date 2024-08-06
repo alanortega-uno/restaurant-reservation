@@ -2,7 +2,10 @@ import { DataSource } from "typeorm";
 import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
 
 import dotenv from "dotenv";
-dotenv.config();
+let envFileName = ".env";
+if (process.env.NODE_ENV === "e2e") envFileName = `.env.e2e`;
+
+dotenv.config({ path: envFileName });
 
 let connectionOptions: DataSourceOptions = {
   type: (process.env.DB_TYPE as "mariadb" | "mysql") ?? "mariadb",

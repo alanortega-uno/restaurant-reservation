@@ -8,9 +8,13 @@
     "build": "npx tsc -p tsconfig.json",
     "start": "node dist/api/src/index.js",
     "dev": "nodemon src/index.ts",
+    "e2e:dev": "NODE_ENV=e2e nodemon src/index.ts",
     "typeorm:generate": "npx typeorm-ts-node-commonjs migration:generate -d ./src/db/dataSourceLocal.ts",
     "typeorm:migrate": "npx typeorm-ts-node-commonjs migration:run -d src/db/dataSourceLocal.ts",
     "typeorm:revert": "npx typeorm-ts-node-commonjs migration:revert -d src/db/dataSourceLocal.ts",
+    "e2e:typeorm:migrate": "NODE_ENV=e2e npx typeorm-ts-node-commonjs migration:run -d src/db/dataSourceLocal.ts",
+    "e2e:typeorm:revert": "NODE_ENV=e2e npx typeorm-ts-node-commonjs migration:revert -d src/db/dataSourceLocal.ts",
+    "e2e:reset:db": "npm run e2e:typeorm:revert && npm run e2e:typeorm:migrate",
     "typeorm:drop": "npx typeorm-ts-node-commonjs schema:drop -d src/db/dataSourceLocal.ts"
   },
   "keywords": [],

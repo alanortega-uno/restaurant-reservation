@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class InitialMigration1722439928348 implements MigrationInterface {
   name = "InitialMigration1722439928348";
+  database: string = String(process.env.DB_NAME);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -24,42 +25,42 @@ export class InitialMigration1722439928348 implements MigrationInterface {
     );
     // TEST ACCOUNT
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`account\` (\`email\`, \`password\`) VALUES (\'test@tests.com\', \'$2a$10$DhCLTt25RzksFFqjhPmLIu4HlJhWcUaY/UKlRhFIcyUQxcRyG7E6S\')`
+      `INSERT INTO \`${this.database}\`.\`account\` (\`email\`, \`password\`) VALUES (\'test@tests.com\', \'$2a$10$DhCLTt25RzksFFqjhPmLIu4HlJhWcUaY/UKlRhFIcyUQxcRyG7E6S\')`
     );
     // ADMIN
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`account\` (\`email\`, \`password\`, \`is_admin\`) VALUES (\'admin@admin.com\', \'$2a$10$TWzrd/KgHRLsRsWBDo2lyuSDBN1t8/5cJOoknPtiBFIuF72CZB1cu\', 1)`
+      `INSERT INTO \`${this.database}\`.\`account\` (\`email\`, \`password\`, \`is_admin\`) VALUES (\'admin@admin.com\', \'$2a$10$TWzrd/KgHRLsRsWBDo2lyuSDBN1t8/5cJOoknPtiBFIuF72CZB1cu\', 1)`
     );
     // TABLES
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'1\', 2)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'1\', 2)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'2\', 6)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'2\', 6)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'3\', 4)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'3\', 4)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'4\', 2)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'4\', 2)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'5\', 4)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'5\', 4)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'6\', 2)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'6\', 2)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'7\', 4)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'7\', 4)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'8\', 8)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'8\', 8)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'9\', 2)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'9\', 2)`
     );
     await queryRunner.query(
-      `INSERT INTO \`restaurant_reservations\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'10\', 8)`
+      `INSERT INTO \`${this.database}\`.\`table\` (\`name\`, \`capacity\`) VALUES (\'10\', 8)`
     );
   }
 
