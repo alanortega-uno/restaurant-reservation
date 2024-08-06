@@ -12,7 +12,12 @@
       No
     </button>
 
-    <button type="button" class="btn btn-danger" (click)="modal.close(true)">
+    <button
+      data-cy="confirmLogoutButton"
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.close(true)"
+    >
       Yes
     </button>
   </div>
@@ -23,11 +28,18 @@
     type="button"
     class="btn btn-outline-secondary"
     id="dropdownBasic1"
+    data-cy="openLogoutMenuButton"
     ngbDropdownToggle
   >
     {{ accountEmail }}
   </button>
   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-    <button ngbDropdownItem (click)="openModal(confirmModal)">Logout</button>
+    <button
+      data-cy="openLogoutModalConfirmButton"
+      ngbDropdownItem
+      (click)="openModal(confirmModal)"
+    >
+      Logout
+    </button>
   </div>
 </div>

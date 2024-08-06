@@ -10,7 +10,12 @@
 
     <div class="mb-3">
       <label for="status" class="form-label">Status</label>
-      <select id="status" class="form-select" formControlName="status">
+      <select
+        id="status"
+        class="form-select"
+        formControlName="status"
+        data-cy="reservationStatusSelect"
+      >
         <option
           *ngFor="let status of tableStatusKeyValue"
           [value]="status.value"
@@ -119,6 +124,7 @@
     class="btn btn-outline-secondary"
     (click)="activeModal.close()"
     [disabled]="isLoading"
+    data-cy="reservationFormCloseButton"
   >
     Close</button
   ><button
@@ -129,6 +135,7 @@
         !reservationForm.valid) ||
       isLoading
     "
+    data-cy="reservationFormUpdateButton"
   >
     <span
       class="spinner-grow spinner-grow-sm"

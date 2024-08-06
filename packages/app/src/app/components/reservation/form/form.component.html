@@ -19,6 +19,7 @@
         type="text"
         formControlName="name"
         autocomplete="false"
+        data-cy="newReservationFormNameInput"
       />
       <div
         *ngIf="
@@ -42,6 +43,7 @@
         class="form-control"
         type="text"
         formControlName="phone"
+        data-cy="newReservationFormPhoneInput"
       />
 
       <div
@@ -73,6 +75,7 @@
         min="1"
         [max]="table.capacity"
         formControlName="numberOfPeople"
+        data-cy="newReservationFormNumberOfPeopleInput"
       />
 
       <div
@@ -109,6 +112,7 @@
     class="btn btn-primary"
     [disabled]="!reservationForm.valid || blocked || isLoading"
     (click)="openConfirmModal()"
+    data-cy="newReservationFormSubmitButton"
   >
     <span
       class="spinner-grow spinner-grow-sm"

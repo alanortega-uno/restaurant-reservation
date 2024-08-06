@@ -6,7 +6,7 @@
     <a class="btn ms-2" [routerLink]="['/statistics']">Statistics</a>
   </div>
 
-  <div>Admin: <app-logout></app-logout></div>
+  <div><span data-cy="userType">Admin</span>: <app-logout></app-logout></div>
 </nav>
 
 <div class="container text-center" *ngIf="vm$ | async as vm">

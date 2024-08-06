@@ -14,7 +14,12 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+export const resetDB = () => {
+  cy.log('Reset DB...');
+  cy.exec('cd ../api && npm run e2e:reset:db');
+};

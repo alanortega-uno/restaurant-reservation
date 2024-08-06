@@ -32,7 +32,11 @@
     I want to modify something
   </button>
 
-  <button class="btn btn-primary" (click)="activeModal.close(true)">
+  <button
+    class="btn btn-primary"
+    (click)="activeModal.close(true)"
+    data-cy="newReservationConfirmButton"
+  >
     Confirm
   </button>
 </div>

@@ -1,9 +1,9 @@
 <nav
   class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between"
 >
-  <h4>Reservations</h4>
+  <h4 data-cy="pageTitle">Reservations</h4>
 
-  <div>Account: <app-logout></app-logout></div>
+  <div><span data-cy="userType">Account</span>: <app-logout></app-logout></div>
 </nav>
 <div class="container text-center" *ngIf="vm$ | async as vm">
   <div
