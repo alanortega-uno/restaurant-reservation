@@ -16,7 +16,7 @@ export class AuthenticationService {
   login(credentials: { email: string; password: string }) {
     return this.http
       .post<{ accessToken: string; refreshToken: string }>(
-        environment.apiBaserURL + '/auth/login',
+        environment.apiBaserURL + '/api/auth/login',
         credentials
       )
       .pipe(catchError(this.errorHandler.handleHttpError));
@@ -24,13 +24,13 @@ export class AuthenticationService {
 
   loginWithGoogle(credentials: string) {
     return this.http
-      .post(environment.apiBaserURL + '/auth/google', { credentials })
+      .post(environment.apiBaserURL + '/api/auth/google', { credentials })
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 
   createNewAccount(credentials: { email: string; password: string }) {
     return this.http
-      .post(environment.apiBaserURL + '/auth/new-account', credentials)
+      .post(environment.apiBaserURL + '/api/auth/new-account', credentials)
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 }

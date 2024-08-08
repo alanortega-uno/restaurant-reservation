@@ -21,7 +21,7 @@ export class TableStatusService {
   ) {
     console.log('reservation', reservation);
     return this.http
-      .put(environment.apiBaserURL + `/table-status/${table.id}`, {
+      .put(environment.apiBaserURL + `/api/table-status/${table.id}`, {
         table,
         reservation,
       })

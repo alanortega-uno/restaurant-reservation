@@ -15,7 +15,7 @@ export class TableService {
 
   getAllTables() {
     return this.http
-      .get(environment.apiBaserURL + '/tables')
+      .get(environment.apiBaserURL + '/api/tables')
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 }

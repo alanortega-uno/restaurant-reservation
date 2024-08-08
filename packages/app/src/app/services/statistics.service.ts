@@ -15,20 +15,21 @@ export class StatisticsService {
 
   getThisWeekReservationData() {
     return this.http
-      .get(environment.apiBaserURL + '/statistics/this-week')
+      .get(environment.apiBaserURL + '/api/statistics/this-week')
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 
   getThisMonthReservationData() {
     return this.http
-      .get(environment.apiBaserURL + '/statistics/this-month')
+      .get(environment.apiBaserURL + '/api/statistics/this-month')
       .pipe(catchError(this.errorHandler.handleHttpError));
   }
 
   getCustomDateRangeReservationData(startDate: string, endDate: string) {
     return this.http
       .get(
-        environment.apiBaserURL + `/statistics/custom/${startDate}/${endDate}`
+        environment.apiBaserURL +
+          `/api/statistics/custom/${startDate}/${endDate}`
       )
       .pipe(catchError(this.errorHandler.handleHttpError));
   }

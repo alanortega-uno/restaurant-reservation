@@ -70,7 +70,6 @@ const main = async () => {
 
     const port = Number(process.env.PORT) || 4000;
 
-    // routes
     app.use("/api", routes);
 
     app.use(internalErrorLogger);
