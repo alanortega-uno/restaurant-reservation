@@ -4,7 +4,6 @@ import { ErrorHandlerService } from './error-handler.service';
 import { environment } from 'src/environments/environment';
 import { catchError } from 'rxjs';
 import { TableEntityData } from '../../../../shared/interfaces/tables';
-import { Reservation } from '@restaurant-reservation/shared';
 
 @Injectable({
   providedIn: 'root',
