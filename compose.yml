@@ -1,0 +1,44 @@
+name: restaurant_reservations_dev
+
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - restaurant-reservations-mariadb-data:/var/lib/mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: Control123
+      MARIADB_DATABASE: restaurant_reservations
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  api:
+    env_file: "packages/api/dev.env"
+    image: node:16-alpine
+    command: >
+      sh -c "npm run typeorm:migrate -w @restaurant-reservation/api &&
+            npm run dev -w @restaurant-reservation/api"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    links:
+      - mariadb
+  app:
+    image: node:16-alpine
+    command: sh -c "npm run dev -w @restaurant-reservation/app"
+    ports:
+      - 4200:4200
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - api
+volumes:
+  restaurant-reservations-mariadb-data:
