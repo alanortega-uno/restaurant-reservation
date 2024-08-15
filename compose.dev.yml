@@ -18,7 +18,9 @@ services:
     env_file: "packages/api/dev.env"
     image: node:16-alpine
     command: >
-      sh -c "npm run typeorm:migrate -w @restaurant-reservation/api &&
+      sh -c "apk add --update curl && 
+            rm -rf /var/cache/apk/* &&
+            npm run typeorm:migrate -w @restaurant-reservation/api &&
             npm run dev -w @restaurant-reservation/api"
     ports:
       - 3000:3000
@@ -30,15 +32,29 @@ services:
         condition: service_healthy
     links:
       - mariadb
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-G", "http://localhost:3000/api/docs/"]
+      interval: 30s
+      timeout: 10s
+      retries: 30
   app:
     image: node:16-alpine
-    command: sh -c "npm run dev -w @restaurant-reservation/app"
+    command: >
+      sh -c "apk add --update curl && 
+      rm -rf /var/cache/apk/* && 
+      npm run dev -w @restaurant-reservation/app"
     ports:
       - 4200:4200
     working_dir: /app
     volumes:
       - ./:/app
     depends_on:
-      - api
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-G", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 30
 volumes:
   restaurant-reservations-mariadb-data:
