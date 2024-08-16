@@ -27,6 +27,7 @@ services:
       DB_PORT: 3306
       DB_USERNAME: root
       DB_PASSWORD: Control123
+      ALLOWED_ORIGIN_2: http://app:4200
     command: >
       sh -c "apk add --update curl && 
             rm -rf /var/cache/apk/* &&
@@ -54,7 +55,7 @@ services:
       sh -c "apk add --update curl && 
       rm -rf /var/cache/apk/* && 
       npm i &&
-      npm run dev -w @restaurant-reservation/app"
+      npm run e2e:dev -w @restaurant-reservation/app"
     ports:
       - 4200:4200
     working_dir: /app
@@ -68,5 +69,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 30
+  e2e:
+    image: cypress/included:13.13.2
+    working_dir: /tests
+    volumes:
+      - ./packages/app/:/tests
+    depends_on:
+      api:
+        condition: service_healthy
+      app:
+        condition: service_healthy
 volumes:
   restaurant-reservations-mariadb-data:

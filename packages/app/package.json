@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "dev": "ng serve --host 0.0.0.0",
+    "e2e:dev": "ng serve --c=e2e --host 0.0.0.0 --disable-host-check",
     "build": "ng build",
     "build:stg": "ng build --c=stg",
     "watch": "ng build --watch --configuration development",
