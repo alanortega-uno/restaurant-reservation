@@ -20,6 +20,7 @@ import './commands';
 // require('./commands')
 
 export const resetDB = () => {
-  cy.log('Reset DB...');
-  cy.exec('cd ../api && npm run e2e:reset:db');
+  cy.log('[Reset DB]...');
+  // cy.exec('cd ../api && npm run e2e:reset:db');
+  cy.request('http://localhost:3000/api/e2e/reset-db');
 };
