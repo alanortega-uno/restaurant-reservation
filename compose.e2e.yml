@@ -1,0 +1,72 @@
+name: restaurant_reservations_e2e
+
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - restaurant-reservations-mariadb-data:/var/lib/mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: Control123
+      MARIADB_DATABASE: restaurant_reservations_tests
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  api:
+    image: node:16-alpine
+    environment:
+      NODE_ENV: e2e
+      DB_NAME: restaurant_reservations_tests
+      PORT: 3000
+      ACCESS_TOKEN_SECRET: MEWyZKz9lSJeba2QPfdL5dkJrLZtPhBPB6VpGKvkROmLf1L3gK+0rN0za71/I/LBABFY4RCtmrzB7H703RH+/vx5oeS37CwITqoVZrMESWs6wFdG4v8ZS40mD7rQ46yUBBODCS20+ET7ZT3bU8U2jTEU6Hd0VD/gfmfm7lPldiu9eWzsN7e1AlP3qhwzWvjalVSr6lKsqdW1nKyzp7eIAvArkmAMvmlOua26ZJOPSKokEJdXRSLTQl9NvukUcgFnf2Wp/ojDewqjY8lswIAcnR5bPM5mpY5e7EffcTyjceEmsnE6IYztdGm6ZQCBYGbFsrNe8wDztrSngcPe37kntA==
+      REFRESH_TOKEN_SECRET: ys24tHModmCT7xniIeujkqnnGP1LiXfouCYOP5DxnJZFHaYXdc4bEkaYu/ZWNAhpR++REd9BLcT5lpC/0vlnMIeD9fpRiG+Xa1kcTqmdzvbO9ZeRj6Ttq30ywJMo+9NyD3Ex9ZSNKfHGXMpjjPNE/JuOJEXfQkGxw1HOonbI+TKu/evLcPRw1lzFZ2ChKVGvkxYsWPjju7DaBZCcwpjdWWXjQ3WvB2lhAXVRaS62vM+Kx4LLkcsYGU7ZQByNRyH4MbbNr1iw+5WVkTH/IpYq48i2WgoiLJBAkXZOrvvm95SGrYXAo5d9pUf3P7T6GY0lr1v1vuaEc3S0O4NK0DYTAQ==
+      DB_TYPE: mariadb
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: Control123
+    command: >
+      sh -c "apk add --update curl && 
+            rm -rf /var/cache/apk/* &&
+            npm i &&
+            npm run e2e:typeorm:migrate -w @restaurant-reservation/api &&
+            npm run e2e:dev -w @restaurant-reservation/api"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    links:
+      - mariadb
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-G", "http://localhost:3000/api/docs/"]
+      interval: 30s
+      timeout: 10s
+      retries: 30
+  app:
+    image: node:16-alpine
+    command: >
+      sh -c "apk add --update curl && 
+      rm -rf /var/cache/apk/* && 
+      npm i &&
+      npm run dev -w @restaurant-reservation/app"
+    ports:
+      - 4200:4200
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-G", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 30
+volumes:
+  restaurant-reservations-mariadb-data:
