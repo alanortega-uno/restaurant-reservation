@@ -20,7 +20,6 @@ export class ReservationEffects {
       mergeMap(() =>
         this.reservationService.getReservation().pipe(
           map((response: any) => {
-            console.log('ReservationsActions.loadReservation', response);
             if (response.error) {
               return ReservationsActions.loadReservationFailure({
                 error: response.error,
@@ -45,7 +44,6 @@ export class ReservationEffects {
       mergeMap((props) =>
         this.reservationService.getReservationByTable(props.tableId).pipe(
           map((response: any) => {
-            console.log('ReservationsActions.loadReservationByTable', response);
             if (response.error) {
               return ReservationsActions.loadReservationFailure({
                 error: response.error,
@@ -70,7 +68,6 @@ export class ReservationEffects {
       mergeMap((props) =>
         this.reservationService.createReservation(props).pipe(
           map((response: any) => {
-            console.log('makeReservation Effect', response);
             if (response.error) {
               return ReservationsActions.makeReservationFailure({
                 error: response.error,
@@ -137,7 +134,6 @@ export class ReservationEffects {
               });
             }
 
-            console.log('updateReservation$ success', response.reservation);
             return ReservationsActions.updateReservationSuccess({
               reservation: response.reservation as Reservation,
             });

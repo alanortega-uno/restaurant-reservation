@@ -14,7 +14,6 @@ export class TableEffects {
       mergeMap(() =>
         this.tableService.getAllTables().pipe(
           map((response: any) => {
-            console.log(response);
             if (response.error) {
               return TablesActions.loadTablesFailure({
                 error: response.error,

@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.account$
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ email, isAdmin, accessToken, refreshToken }) => {
-        console.log({ email, isAdmin, accessToken, refreshToken });
         if (accessToken && refreshToken) {
           if (isAdmin) {
             this.router.navigate(['table-status']);

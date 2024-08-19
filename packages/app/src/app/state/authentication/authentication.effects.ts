@@ -49,7 +49,6 @@ export class AuthenticationEffects {
           .login({ email: action.email, password: action.password })
           .pipe(
             map((response: any) => {
-              console.log(response);
               if (response.error) {
                 return AuthenticationActions.loginFailure({
                   error: response.error,

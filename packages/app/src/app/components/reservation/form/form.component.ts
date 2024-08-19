@@ -71,7 +71,6 @@ export class ReservationFormComponent implements OnInit {
     this.reservation$
       .pipe(takeUntil(this.destroy$))
       .subscribe((activeReservation) => {
-        // console.log('activeReservation', activeReservation);
         if (activeReservation) this.activeReservation = activeReservation;
         else this.activeModal.close();
       });
@@ -113,7 +112,6 @@ export class ReservationFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('FORM', this.activeReservation);
     this.reservationForm = this.formBuilder.group({
       name: [this.activeReservation?.name ?? '', Validators.required],
       phone: [
