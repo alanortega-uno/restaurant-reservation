@@ -49,7 +49,6 @@ const router = Router();
  *          type: string
  *        tokenRefresh:
  *          type: string
- *
  */
 
 /**
