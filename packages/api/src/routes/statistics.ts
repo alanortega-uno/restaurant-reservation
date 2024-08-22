@@ -12,6 +12,34 @@ const router = Router();
 
 /**
  * @openapi
+ * components:
+ *  schemas:
+ *    StatisticsData:
+ *      type: object
+ *      required:
+ *        - data
+ *        - matrix
+ *      properties:
+ *        data:
+ *          type: array
+ *          items:
+ *            type: array
+ *            items:
+ *              oneOf:
+ *                - type: string
+ *                - type: integer
+ *        matrix:
+ *          type: array
+ *          items:
+ *            type: array
+ *            items:
+ *              oneOf:
+ *                - type: string
+ *                - type: integer
+ */
+
+/**
+ * @openapi
  * /api/statistics/this-week:
  *  get:
  *    security:
@@ -25,24 +53,7 @@ const router = Router();
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              properties:
- *                data:
- *                  type: array
- *                  items:
- *                    type: array
- *                    items:
- *                      oneOf:
- *                        - type: string
- *                        - type: integer
- *                matrix:
- *                  type: array
- *                  items:
- *                    type: array
- *                    items:
- *                      oneOf:
- *                        - type: string
- *                        - type: integer
+ *              $ref: '#/components/schemas/StatisticsData'
  *
  *      400:
  *        description: Bad request
@@ -69,24 +80,7 @@ router.get(
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              properties:
- *                data:
- *                  type: array
- *                  items:
- *                    type: array
- *                    items:
- *                      oneOf:
- *                        - type: string
- *                        - type: integer
- *                matrix:
- *                  type: array
- *                  items:
- *                    type: array
- *                    items:
- *                      oneOf:
- *                        - type: string
- *                        - type: integer
+ *              $ref: '#/components/schemas/StatisticsData'
  *
  *      400:
  *        description: Bad request
@@ -128,24 +122,7 @@ router.get(
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              properties:
- *                data:
- *                  type: array
- *                  items:
- *                    type: array
- *                    items:
- *                      oneOf:
- *                        - type: string
- *                        - type: integer
- *                matrix:
- *                  type: array
- *                  items:
- *                    type: array
- *                    items:
- *                      oneOf:
- *                        - type: string
- *                        - type: integer
+ *              $ref: '#/components/schemas/StatisticsData'
  *
  *      400:
  *        description: Bad request
