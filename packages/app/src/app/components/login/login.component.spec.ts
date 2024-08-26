@@ -1,77 +1,114 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
-
-import { AuthenticationService } from 'src/app/services/authentication.service';
-
+import { Store, StoreModule } from '@ngrx/store';
+import { of, Subject } from 'rxjs';
 import { LoginComponent } from './login.component';
-import { Store } from '@ngrx/store';
+import * as AuthenticationActions from '../../state/authentication/authentication.actions';
+import {
+  selectAccount,
+  selectAuthenticationApiRequestStatus,
+} from 'src/app/state/authentication/authentication.selectors';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let authService: any;
-  let router: Router;
+  let store: jasmine.SpyObj<Store>;
+  let router: jasmine.SpyObj<Router>;
+
+  let sessionStorageSpy: jasmine.Spy;
+
+  const mockStore = {
+    select: jasmine.createSpy('select').and.callFake((selector) => {
+      if (selector === selectAccount) {
+        return of({
+          email: null,
+          isAdmin: false,
+          accessToken: null,
+          refreshToken: null,
+        });
+      }
+      if (selector === selectAuthenticationApiRequestStatus) {
+        return of({ status: 'idle', error: null });
+      }
+      return of();
+    }),
+    dispatch: jasmine.createSpy('dispatch'),
+  };
+
+  const mockRouter = {
+    navigate: jasmine.createSpy('navigate'),
+  };
 
   beforeEach(async () => {
-    const authServiceMock = {
-      login: jasmine.createSpy('login').and.returnValue(of({})),
-      loginWithGoogle: jasmine
-        .createSpy('loginWithGoogle')
-        .and.returnValue(of({})),
-    };
-
-    const routerMock = {
-      navigate: jasmine.createSpy('navigate'),
-    };
-
-    const testStore = jasmine.createSpyObj('Store', ['select', 'dispatch']);
+    const storeSpy = jasmine.createSpyObj('Store', ['dispatch']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [ReactiveFormsModule],
       providers: [
-        { provide: AuthenticationService, useValue: authServiceMock },
-        { provide: Router, useValue: routerMock },
-        { provide: Store, useValue: testStore },
+        { provide: Store, useValue: mockStore },
+        { provide: Router, useValue: mockRouter },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthenticationService);
-    router = TestBed.inject(Router);
+    store = TestBed.inject(Store) as jasmine.SpyObj<Store>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+
+    sessionStorageSpy = spyOn(sessionStorage, 'getItem');
+    spyOn(sessionStorage, 'removeItem');
 
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    mockStore.dispatch.calls.reset();
+    mockRouter.navigate.calls.reset();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
   describe('ngOnInit', () => {
-    it('should call loginWithGoogle if gCredentials is available in sessionStorage', () => {
-      spyOn(sessionStorage, 'getItem').and.returnValue('test-credentials');
-      spyOn(sessionStorage, 'removeItem');
+    it('should navigate to reservation if tokens are present in sessionStorage', () => {
+      sessionStorageSpy.and.callFake((key: string) => {
+        if (key === 'accessToken' || key === 'refreshToken') {
+          return 'token';
+        }
+        return null;
+      });
 
       component.ngOnInit();
 
-      expect(sessionStorage.getItem).toHaveBeenCalledWith('gCredentials');
-      expect(sessionStorage.removeItem).toHaveBeenCalledWith('gCredentials');
-      expect(authService.loginWithGoogle).toHaveBeenCalledWith(
-        'test-credentials'
-      );
+      expect(router.navigate).toHaveBeenCalledWith(['reservation']);
     });
 
-    it('should not call loginWithGoogle if gCredentials is not available in sessionStorage', () => {
-      spyOn(sessionStorage, 'getItem').and.returnValue(null);
+    it('should dispatch loginWithGoogle action if gCredentials is present', () => {
+      sessionStorageSpy.and.returnValue('test-credentials');
+
+      const action = AuthenticationActions.loginWithGoogle({
+        credentials: 'test-credentials',
+      });
 
       component.ngOnInit();
 
-      expect(authService.loginWithGoogle).not.toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(action);
+    });
+
+    it('should dispatch clearError action on init', () => {
+      component.ngOnInit();
+      expect(mockStore.dispatch).toHaveBeenCalledWith(
+        AuthenticationActions.clearError()
+      );
     });
   });
 
   describe('sendLoginRequest', () => {
-    it('should call login and navigate on successful login', () => {
+    it('should dispatch login action with email and password', () => {
       component.loginForm.setValue({
         email: 'test@example.com',
         password: 'password',
@@ -79,26 +116,32 @@ describe('LoginComponent', () => {
 
       component.sendLoginRequest();
 
-      expect(authService.login).toHaveBeenCalledWith({
+      expect(mockStore.dispatch).toHaveBeenCalledWith(
+        AuthenticationActions.login({
+          email: 'test@example.com',
+          password: 'password',
+        })
+      );
+    });
+  });
+
+  describe('Form Validation', () => {
+    it('should invalidate the form if email is empty', () => {
+      component.loginForm.setValue({ email: '', password: 'password' });
+      expect(component.loginForm.invalid).toBeTruthy();
+    });
+
+    it('should invalidate the form if password is empty', () => {
+      component.loginForm.setValue({ email: 'test@example.com', password: '' });
+      expect(component.loginForm.invalid).toBeTruthy();
+    });
+
+    it('should validate the form if both email and password are provided', () => {
+      component.loginForm.setValue({
         email: 'test@example.com',
         password: 'password',
       });
-      expect(router.navigate).toHaveBeenCalledWith(['reservation']);
+      expect(component.loginForm.valid).toBeTruthy();
     });
-
-    // TODO: Write new tests for NgRx
-    // it('should set apiError on login failure', () => {
-    //   const mockError = { error: 'Login failed', status: 401 };
-    //   authService.login.and.returnValue(of(mockError));
-
-    //   component.loginForm.setValue({
-    //     email: 'test@example.com',
-    //     password: 'password',
-    //   });
-
-    //   component.sendLoginRequest();
-
-    //   expect(component.apiError).toEqual(mockError);
-    // });
   });
 });

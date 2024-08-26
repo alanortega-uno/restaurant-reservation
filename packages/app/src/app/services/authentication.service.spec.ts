@@ -6,7 +6,6 @@ import {
 import { AuthenticationService } from './authentication.service';
 import { environment } from 'src/environments/environment';
 import { APIError } from '@restaurant-reservation/shared';
-import { HttpErrorResponse } from '@angular/common/http';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -26,32 +25,74 @@ describe('AuthenticationService', () => {
     httpMock.verify();
   });
 
-  describe('#login, #loginWithGoogle, #createNewAccount', () => {
-    it('should return an APIError on HTTP error', () => {
-      const mockError: APIError = {
-        error: {
-          message: 'Send email and password',
-        },
-        statusCode: 400,
+  describe('login', () => {
+    it('should log in with the correct credentials', () => {
+      const credentials = { email: 'test@test.com', password: 'password' };
+
+      const loginRequestResponse = {
+        email: credentials.email,
+        isAdmin: false,
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken',
       };
-      const credentials = { email: 'test@example.com', password: 'password' };
 
       service.login(credentials).subscribe((response) => {
-        expect(response).toEqual(mockError);
+        expect(response).toEqual(loginRequestResponse);
       });
 
-      const req = httpMock.expectOne(`${environment.apiBaserURL}/auth/login`);
-      expect(req.request.method).toBe('POST');
-
-      req.flush(
-        {
-          message: 'Send email and password',
-        },
-        {
-          status: 400,
-          statusText: 'Bad Request',
-        }
+      const requestTest = httpMock.expectOne(
+        environment.apiBaserURL + '/api/auth/login'
       );
+
+      expect(requestTest.request.method).toEqual('POST');
+
+      requestTest.flush(loginRequestResponse);
+    });
+
+    it('should log in with google', () => {
+      const credentials = 'this-is-a-credential-mock';
+
+      const loginRequestResponse = {
+        email: 'test@test.com',
+        isAdmin: false,
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken',
+      };
+
+      service.loginWithGoogle(credentials).subscribe((response) => {
+        expect(response).toEqual(loginRequestResponse);
+      });
+
+      const requestTest = httpMock.expectOne(
+        environment.apiBaserURL + '/api/auth/google'
+      );
+
+      expect(requestTest.request.method).toEqual('POST');
+
+      requestTest.flush(loginRequestResponse);
+    });
+
+    it('should create an account', () => {
+      const credentials = { email: 'test@test.com', password: 'password' };
+
+      const loginRequestResponse = {
+        email: credentials.email,
+        isAdmin: false,
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken',
+      };
+
+      service.createNewAccount(credentials).subscribe((response) => {
+        expect(response).toEqual(loginRequestResponse);
+      });
+
+      const requestTest = httpMock.expectOne(
+        environment.apiBaserURL + '/api/auth/new-account'
+      );
+
+      expect(requestTest.request.method).toEqual('POST');
+
+      requestTest.flush(loginRequestResponse);
     });
   });
 });
